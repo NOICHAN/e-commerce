@@ -1,30 +1,17 @@
 <template>
-  <nav>
+  <nav class="bg-primary">
     <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/about">About</router-link> |
+    <router-link to="/login">login</router-link>
   </nav>
-  <router-view/>
+  <div class="bg-secondary py-5">
+    <router-view/>
+  </div>
+  <footer>
+    <p class="bg-primary">123456</p>
+  </footer>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
+@import './assets/main';
 </style>
