@@ -8,30 +8,46 @@ const routes = [
     component: HomeView,
   },
   {
-    path: '/about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
-  },
-  {
     path: '/login',
     component: () => import('../views/LogInView.vue'),
   },
   {
     path: '/signup',
-    component: () => import('../views/signUpView.vue'),
+    component: () => import('../views/SignUpView.vue'),
+  },
+  {
+    path: '/paymentQuestion',
+    component: () => import('../views/PaymentQuestionView.vue'),
+  },
+  {
+    path: '/transportQuestion',
+    component: () => import('../views/TransportQuestionView.vue'),
+  },
+  {
+    path: '/returnsQuestion',
+    component: () => import('../views/ReturnsQuestionView.vue'),
+  },
+  {
+    path: '/dashboard',
+    component: () => import('../views/DashboardView.vue'),
+    children: [
+      {
+        path: 'products',
+        component: () => import('../views/ProductsView.vue'),
+      },
+    ],
   },
   // 404 頁面
   {
     path: '/:pathMatch(.*)*',
-    component: () => import('../views/NotFound.vue'),
+    component: () => import('../views/NotFoundView.vue'),
   },
 ];
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+  linkActiveClass: 'active',
 });
 
 export default router;

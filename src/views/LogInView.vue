@@ -3,7 +3,8 @@
     <v-form class="row justify-content-center"
     @submit="signIn" v-slot="{ errors }">
       <div class="col-10 col-md-6 bg-white d-flex flex-column align-items-center">
-        <h3 class="my-5 h2 text-primary fw-bold">會員登入</h3>
+        <h3 class="my-5 h1 text-primary fw-bold">會員登入</h3>
+        <ToggleLogInSignUp></ToggleLogInSignUp>
         <div class="form-floating mb-4 w-75">
           <v-field type="email" name="email" class="form-control"
           id="floatingInput" placeholder="name@example.com"
@@ -25,9 +26,6 @@
           </error-message>
         </div>
         <div class="my-5">
-          <router-link to="/signup">
-          <button type="button" class="btn btn-outline-success btn-lg me-5">
-          註冊</button></router-link>
           <button type="submit" class="btn btn-outline-success btn-lg">登入</button>
         </div>
       </div>
@@ -36,6 +34,8 @@
 </template>
 
 <script>
+import ToggleLogInSignUp from '../components/ToggleLogInSignUp.vue';
+
 export default {
   data() {
     return {
@@ -50,19 +50,21 @@ export default {
       const api = `${process.env.VUE_APP_API}admin/signin`;
       this.$http.post(api, this.user)
         .then((res) => {
-          if (res.data.message === '登入成功') {
-            this.$router.push(this.previousPage() || '/');
+          if (res.data.success) {
+            const { token, expired } = res.data;
+            document.cookie = `petToken=${token}; expires=${new Date(expired)}`;
+            this.$router.push('/dashboard/products');
           } else {
-            alert('帳號或密碼錯誤。'); // eslint-disable-line no-alert
+            this.$alert('帳號或密碼錯誤。');
           }
         })
         .catch(() => {
-          alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。'); // eslint-disable-line no-alert
+          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
         });
     },
-    previousPage() {
-      this.$router.go(-1);
-    },
+  },
+  components: {
+    ToggleLogInSignUp,
   },
 };
 </script>

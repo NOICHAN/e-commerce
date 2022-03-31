@@ -1,17 +1,28 @@
 <template>
-  <nav class="bg-primary">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/login">login</router-link>
-  </nav>
-  <div class="bg-secondary py-5">
+  <Navbar></Navbar>
+  <div class="bg-secondary py-5 mt">
     <router-view/>
   </div>
-  <footer>
-    <p class="bg-primary">123456</p>
-  </footer>
+  <Footer></Footer>
 </template>
 
-<style lang="scss">
-@import './assets/main';
+<style scoped lang="scss">
+.mt {
+  margin-top: 86px;
+  @media(min-width: 576px){
+      margin-top: 113px;
+    }
+}
 </style>
+
+<script>
+import Navbar from './components/NavbarComponent.vue';
+import Footer from './components/FooterComponent.vue';
+
+export default {
+  components: {
+    Footer,
+    Navbar,
+  },
+};
+</script>

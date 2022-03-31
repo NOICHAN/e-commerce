@@ -1,10 +1,11 @@
 <template>
 <div class="container">
     <v-form class="row justify-content-center" @submit="signUp" v-slot="{ errors }">
-        <div class="col-10 col-md-6 bg-white px-5">
-            <h3 class="my-5 h2 text-primary fw-bold text-center">會員註冊</h3>
+        <div class="col-10 col-md-6 bg-white px-5 d-flex flex-column align-items-center">
+            <h3 class="my-5 h1 text-primary fw-bold text-center">會員註冊</h3>
+            <ToggleLogInSignUp></ToggleLogInSignUp>
             <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label -->
-            <v-field type="email" class="form-control my-4"
+            <v-field type="email" class="form-control mb-4"
             placeholder="請輸入E-mail" name="email" rules="email|required"
             :class="{ 'is-invalid': errors['email'] }"
             v-model="signUpData.signUpEmail"></v-field>
@@ -37,7 +38,7 @@
             v-model="signUpData.signUpTel"></v-field>
             <error-message class="invalid-feedback" name="手機號碼">
             </error-message>
-            <div class="my-5 text-end">
+            <div class="my-5">
             <button type="submit" class="btn btn-outline-success btn-lg">註冊</button>
             </div>
         </div>
@@ -46,6 +47,8 @@
 </template>
 
 <script>
+import ToggleLogInSignUp from '../components/ToggleLogInSignUp.vue';
+
 export default {
   data() {
     return {
@@ -59,11 +62,14 @@ export default {
   },
   methods: {
     signUp() {
-      alert('註冊成功，請再次重新登入，按下確認鍵後將於3秒後自動回首頁'); // eslint-disable-line no-alert
+      this.$alert('註冊成功，請再次重新登入，將於5秒後自動回首頁。');
       setTimeout(() => {
         this.$router.push('/');
-      }, 3000);
+      }, 5000);
     },
+  },
+  components: {
+    ToggleLogInSignUp,
   },
 };
 
