@@ -13,8 +13,11 @@ import {
 import { localize, setLocale } from '@vee-validate/i18n';
 import zhTW from '@vee-validate/i18n/dist/locale/zh_TW.json';
 import VueSimpleAlert from 'vue3-simple-alert-next';
+import Loading from 'vue3-loading-overlay';
+import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
 import App from './App.vue';
 import router from './router';
+import { currency, date } from './methods/filters';
 
 defineRule('required', required);
 defineRule('email', email);
@@ -29,6 +32,11 @@ setLocale('zh_TW');
 
 const app = createApp(App);
 
+app.config.globalProperties.$filters = {
+  currency,
+  date,
+};
+
 app.use(VueAxios, axios);
 app.use(router);
 app.use(VueSimpleAlert);
@@ -36,5 +44,6 @@ app.use(VueSimpleAlert);
 app.component('VForm', Form);
 app.component('VField', Field);
 app.component('ErrorMessage', ErrorMessage);
+app.component('VLoading', Loading);
 
 app.mount('#app');

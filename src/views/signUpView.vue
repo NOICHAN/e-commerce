@@ -39,7 +39,7 @@
             <error-message class="invalid-feedback" name="手機號碼">
             </error-message>
             <div class="my-5">
-            <button type="submit" class="btn btn-outline-success btn-lg">註冊</button>
+            <button type="submit" class="btn btn-outline-warning btn-lg">註冊</button>
             </div>
         </div>
     </v-form>

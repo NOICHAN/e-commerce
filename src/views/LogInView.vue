@@ -26,7 +26,7 @@
           </error-message>
         </div>
         <div class="my-5">
-          <button type="submit" class="btn btn-outline-success btn-lg">登入</button>
+          <button type="submit" class="btn btn-outline-warning btn-lg">登入</button>
         </div>
       </div>
     </v-form>

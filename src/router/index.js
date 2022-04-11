@@ -35,6 +35,14 @@ const routes = [
         path: 'products',
         component: () => import('../views/ProductsView.vue'),
       },
+      {
+        path: 'orders',
+        component: () => import('../views/OrdersView.vue'),
+      },
+      {
+        path: 'coupons',
+        component: () => import('../views/CouponsView.vue'),
+      },
     ],
   },
   // 404 頁面

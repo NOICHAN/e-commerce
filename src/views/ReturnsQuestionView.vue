@@ -9,7 +9,7 @@
             <h2 class="accordion-header" id="headingOne">
               <button class="accordion-button" type="button" data-bs-toggle="collapse"
                 data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                毛孩市集可以退貨嗎？(毛孩市集不提供換貨服務)
+                毛孩一家一可以退貨嗎？(毛孩一家一不提供換貨服務)
               </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show"
