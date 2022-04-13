@@ -2,7 +2,7 @@
 <VLoading :active="isLoading"></VLoading>
 <div class="text-end">
   <button class="btn btn-outline-primary mt-2" type="button"
-  @click="openModal(true)">新增</button>
+  @click="openProductModal(true)">新增產品</button>
 </div>
   <table class="table mt-4">
   <thead>
@@ -31,7 +31,8 @@
       </td>
       <td>
         <div class="btn-group">
-          <button class="btn btn-outline-info btn-sm" @click="openModal(false, item)">編輯</button>
+          <button class="btn btn-outline-info btn-sm"
+          @click="openProductModal(false, item)">編輯</button>
           <button class="btn btn-outline-danger btn-sm"
           @click="openDelProductModal(item)">刪除</button>
         </div>
@@ -44,8 +45,7 @@
 <ProductModal ref="productModal" :product="tempProduct"
 @update-product="updateProduct" ></ProductModal>
 
-<DelModal ref="delModal" :item="tempProduct"
-@del-item="delProduct"></DelModal>
+<DelModal :item="tempProduct" :page="pagination" ref="delModal" @del-item="delProduct"></DelModal>
 </template>
 
 <script>
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     getProducts(page = 1) {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products/?page=${page}`;
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
       this.isLoading = true;
       this.$http.get(api)
         .then((res) => {
@@ -85,7 +85,7 @@ export default {
           this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
         });
     },
-    openModal(isNew, item) {
+    openProductModal(isNew, item) {
       if (isNew) {
         this.tempProduct = {};
       } else {
@@ -119,13 +119,13 @@ export default {
       const delComponent = this.$refs.delModal;
       delComponent.showModal();
     },
-    delProduct() {
+    delProduct(page) {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`;
       this.$http.delete(api)
         .then(() => {
           const delComponent = this.$refs.delModal;
           delComponent.hideModal();
-          this.getProducts();
+          this.getProducts(page);
         }).catch(() => {
           this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
         });

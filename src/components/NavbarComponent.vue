@@ -1,7 +1,7 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4 fixed-top">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4  fixed-top">
     <div class="container-fluid h4 fw-bold">
-      <h1>
+      <h1 class="mb-0">
         <router-link class="navbar-brand border-0 logo" to="/">毛孩一家一</router-link>
       </h1>
       <button class="navbar-toggler fs-3" type="button"

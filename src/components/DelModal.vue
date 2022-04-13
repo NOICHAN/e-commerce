@@ -13,7 +13,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
         <button type="button" class="btn btn-danger"
-        @click="$emit('del-item')">確認刪除</button>
+        @click="delItem">確認刪除</button>
       </div>
     </div>
   </div>
@@ -31,7 +31,13 @@ export default {
   },
   props: {
     item: {},
+    page: {},
   },
   mixins: [modalMixin],
+  methods: {
+    delItem() {
+      this.$emit('del-item', this.page.current_page);
+    },
+  },
 };
 </script>

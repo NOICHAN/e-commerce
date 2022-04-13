@@ -2,12 +2,11 @@
   <div class="modal fade" id="exampleModal" tabindex="-1"
   aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal">
 <v-form class="modal-dialog modal-xl" role="document" v-slot="{ errors }"
-@submit="$emit('update-product', tempProduct)">
+@submit="$emit('update-product',tempProduct)">
   <div class="modal-content border-0">
     <div class="modal-header bg-primary text-white">
       <h5 class="modal-title" id="exampleModalLabel">
-        <span v-if="tempProduct.title">編輯產品</span>
-        <span v-else>新增產品</span>
+        產品
       </h5>
       <button type="button" class="btn-close"
               data-bs-dismiss="modal" aria-label="Close"></button>
