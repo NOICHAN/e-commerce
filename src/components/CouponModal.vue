@@ -1,6 +1,6 @@
 <template>
   <div class="modal fade" id="couponModal" tabindex="-1"
-       aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal">
+       aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal" role="dialog">
     <v-form class="modal-dialog" role="document" v-slot="{ errors }"
     @submit="$emit('update-coupon', tempCoupon)">
       <div class="modal-content border-0">
@@ -54,8 +54,7 @@
               <input class="form-check-input" type="checkbox"
                      :true-value="1"
                      :false-value="0" id="is_enabled"
-                     v-model="tempCoupon.is_enabled"
-                     checked>
+                     v-model="tempCoupon.is_enabled">
             <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
               <label class="form-check-label" for="is_enabled">
                 是否啟用

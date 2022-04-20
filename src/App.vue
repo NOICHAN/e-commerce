@@ -1,28 +1,5 @@
 <template>
-  <Navbar></Navbar>
-  <div class="bg-secondary py-5 mt">
+  <div class="bg-secondary">
     <router-view/>
   </div>
-  <Footer></Footer>
 </template>
-
-<style scoped lang="scss">
-.mt {
-  margin-top: 78px;
-  @media(min-width: 576px){
-      margin-top: 105px;
-    }
-}
-</style>
-
-<script>
-import Navbar from './components/NavbarComponent.vue';
-import Footer from './components/FooterComponent.vue';
-
-export default {
-  components: {
-    Footer,
-    Navbar,
-  },
-};
-</script>

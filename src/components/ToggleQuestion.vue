@@ -1,8 +1,11 @@
 <template>
     <div class="my-5 d-flex justify-content-center flex-column flex-md-row">
-        <router-link class="fs-5 mx-3 mb-3 mb-md-0" to="/paymentQuestion">付款相關問題</router-link>
-        <router-link class="fs-5 mx-3 mb-3 mb-md-0" to="/transportQuestion">運送相關問題</router-link>
-        <router-link class="fs-5 mx-3" to="/returnsQuestion">退換貨說明</router-link>
+        <router-link class="fs-5 mx-3 mb-3 mb-md-0"
+        to="/user/paymentQuestion">付款相關問題</router-link>
+        <router-link class="fs-5 mx-3 mb-3 mb-md-0"
+        to="/user/transportQuestion">運送相關問題</router-link>
+        <router-link class="fs-5 mx-3"
+        to="/user/returnsQuestion">退換貨說明</router-link>
     </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
     <div class="mb-5">
-        <router-link class="fs-2 mx-2" to="/login">登入</router-link>
-        <router-link class="fs-2 mx-2" to="/signup">註冊</router-link>
+        <router-link class="fs-2 mx-2" to="/user/login">登入</router-link>
+        <router-link class="fs-2 mx-2" to="/user/signup">註冊</router-link>
     </div>
 </template>
 

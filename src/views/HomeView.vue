@@ -1,11 +1,3 @@
 <template>
-  <div class="home">
-    首頁
-  </div>
+<router-link to="/user/list/all">產品列表</router-link>
 </template>
-
-<script>
-export default {
-
-};
-</script>

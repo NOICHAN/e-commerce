@@ -42,7 +42,7 @@
 
   <CouponModal :coupon="tempCoupon" ref="couponModal" @update-coupon="updateCoupon"></CouponModal>
 
-  <DelModal :item="tempCoupon" :page="pagination" ref="delModal"
+  <DelModal :item="tempCoupon" ref="delModal"
   @del-item="delCoupon"></DelModal>
 </template>
 
@@ -99,20 +99,27 @@ export default {
     },
     updateCoupon(item) {
       this.tempCoupon = item;
+      const couponComponent = this.$refs.couponModal;
       // 新增
-      let api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`;
-      let httpMethod = 'post';
+      if (this.isNew) {
+        const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`;
+        const httpMethod = 'post';
+        this.$http[httpMethod](api, { data: this.tempCoupon })
+          .then(() => {
+            couponComponent.hideModal();
+            this.getCoupons();
+          }).catch(() => {
+            this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+          });
+      }
 
       // 編輯
-      if (!this.isNew) {
-        api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${item.id}`;
-        httpMethod = 'put';
-      }
-      const couponComponent = this.$refs.couponModal;
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${item.id}`;
+      const httpMethod = 'put';
       this.$http[httpMethod](api, { data: this.tempCoupon })
         .then(() => {
           couponComponent.hideModal();
-          this.getCoupons();
+          this.getCoupons(this.pagination.current_page);
         }).catch(() => {
           this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
         });
@@ -122,13 +129,13 @@ export default {
       const delComponent = this.$refs.delModal;
       delComponent.showModal();
     },
-    delCoupon(page) {
+    delCoupon() {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`;
       this.$http.delete(api)
         .then(() => {
           const delComponent = this.$refs.delModal;
           delComponent.hideModal();
-          this.getCoupons(page);
+          this.getCoupons(this.pagination.current_page);
         }).catch(() => {
           this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
         });

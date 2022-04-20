@@ -1,6 +1,6 @@
 <template>
   <div class="modal fade" id="exampleModal" tabindex="-1"
-  aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal">
+  aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal" role="dialog">
 <v-form class="modal-dialog modal-xl" role="document" v-slot="{ errors }"
 @submit="$emit('update-product',tempProduct)">
   <div class="modal-content border-0">

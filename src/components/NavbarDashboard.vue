@@ -1,9 +1,9 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4  fixed-top">
     <div class="container-fluid h4 fw-bold">
-      <h1 class="mb-0">
+      <h2 class="mb-0">
         <router-link class="navbar-brand border-0 logo" to="/">毛孩一家一</router-link>
-      </h1>
+      </h2>
       <button class="navbar-toggler fs-3" type="button"
       data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,9 +19,6 @@
           </li>
            <li class="nav-item">
             <router-link class="nav-link" to="/dashboard/coupons">優惠券</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/login">登入</router-link>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#" @click.prevent="logout">登出</a>
@@ -69,7 +66,7 @@ export default {
       this.$http.post(api, this.user)
         .then((res) => {
           if (res.data.success) {
-            this.$router.push('/');
+            this.$router.push('/user/home');
           }
         });
     },

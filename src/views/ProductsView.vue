@@ -42,10 +42,10 @@
 </table>
 <Pagination :pages="pagination" @emit-pages="getProducts"></Pagination>
 
-<ProductModal ref="productModal" :product="tempProduct"
+<ProductModal :product="tempProduct" ref="productModal"
 @update-product="updateProduct" ></ProductModal>
 
-<DelModal :item="tempProduct" :page="pagination" ref="delModal" @del-item="delProduct"></DelModal>
+<DelModal :item="tempProduct" ref="delModal" @del-item="delProduct"></DelModal>
 </template>
 
 <script>
@@ -97,19 +97,25 @@ export default {
     },
     updateProduct(item) {
       this.tempProduct = item;
+      const productComponent = this.$refs.productModal;
       // 新增
-      let api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
-      let httpMethod = 'post';
+      if (this.isNew) {
+        const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
+        const httpMethod = 'post';
+        this.$http[httpMethod](api, { data: this.tempProduct }).then(() => {
+          productComponent.hideModal();
+          this.getProducts();
+        }).catch(() => {
+          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        });
+      }
 
       // 編輯
-      if (!this.isNew) {
-        api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`;
-        httpMethod = 'put';
-      }
-      const productComponent = this.$refs.productModal;
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`;
+      const httpMethod = 'put';
       this.$http[httpMethod](api, { data: this.tempProduct }).then(() => {
         productComponent.hideModal();
-        this.getProducts();
+        this.getProducts(this.pagination.current_page);
       }).catch(() => {
         this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
       });
@@ -119,13 +125,13 @@ export default {
       const delComponent = this.$refs.delModal;
       delComponent.showModal();
     },
-    delProduct(page) {
+    delProduct() {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`;
       this.$http.delete(api)
         .then(() => {
           const delComponent = this.$refs.delModal;
           delComponent.hideModal();
-          this.getProducts(page);
+          this.getProducts(this.pagination.current_page);
         }).catch(() => {
           this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
         });
