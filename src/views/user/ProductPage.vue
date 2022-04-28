@@ -1,6 +1,6 @@
 <template>
 <VLoading :active="isLoading"></VLoading>
-  <div class="row row-cols-1 row-cols-md-2 bg-white py-5">
+  <div class="row row-cols-1 row-cols-md-2 bg-white py-5 gy-5">
     <div class="col">
       <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -21,8 +21,14 @@
         </button>
       </div>
     </div>
-    <div class="col text-center">
-        <h3>{{ product.title }}</h3>
+    <div class="col">
+        <h3 class="text-center mb-5">{{ product.title }}</h3>
+        <strong><p>產品特色 : </p></strong>
+        <p v-for="item in feature" :key="item">{{ item }}</p>
+        <span class="text-dark text-decoration-line-through
+        me-3">原價 : ${{ product.origin_price }}</span>
+        <span class="text-danger fw-bold fs-5 me-3">優惠 : ${{ product.price }}</span>
+        <span class="badge rounded-pill bg-primary fs-6">約{{ discount }}折</span>
     </div>
   </div>
 </template>
@@ -31,7 +37,7 @@
     img {
         height: 500px;
     }
-    h3 {
+    h3,p {
         color: #181b46;
     }
 </style>
@@ -44,7 +50,15 @@ export default {
       id: '',
       isLoading: false,
       active: 0,
+      feature: [],
+      discount: null,
     };
+  },
+  watch: {
+    product() {
+      this.feature = this.product.content.split('\n');
+      this.discount = (Math.round((this.product.price / this.product.origin_price) * 100)) / 10;
+    },
   },
   methods: {
     getProduct() {
