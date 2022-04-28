@@ -16,9 +16,9 @@
 </style>
 
 <script>
-import Navbar from '../components/NavbarHome.vue';
-import Footer from '../components/FooterComponent.vue';
-import emitter from '../methods/emitter';
+import Navbar from '../../components/NavbarHome.vue';
+import Footer from '../../components/FooterComponent.vue';
+import emitter from '../../methods/emitter';
 
 export default {
   components: {

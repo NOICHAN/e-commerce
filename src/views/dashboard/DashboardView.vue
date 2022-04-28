@@ -14,8 +14,8 @@
 </style>
 
 <script>
-import Navbar from '../components/NavbarDashboard.vue';
-import Footer from '../components/FooterComponent.vue';
+import Navbar from '../../components/NavbarDashboard.vue';
+import Footer from '../../components/FooterComponent.vue';
 
 export default {
   components: {

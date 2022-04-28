@@ -13,7 +13,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" to="/user/list/all">產品列表</router-link>
+            <router-link class="nav-link" to="/user/list">產品列表</router-link>
           </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/user/login">員工登入</router-link>
@@ -73,42 +73,13 @@ export default {
       keywords: '',
     };
   },
-  inject: ['emitter'],
   methods: {
     searchKeywords() {
-      if (this.keywords === '') {
-        this.$alert('欄位不可為空白');
-      } else {
-        this.filterProducts = this.products.filter((item) => {
-          const titleResult = item.title.search(this.keywords);
-          const categoryResult = item.category.search(this.keywords);
-          if (titleResult === -1 && categoryResult === -1) {
-            return false;
-          }
-          return true;
-        });
-        this.emitter.emit('get-keywords', this.filterProducts);
-        this.$router.push('/user/list/search');
-      }
+      this.$router.replace({
+        path: '/user/list',
+        query: { search: this.keywords },
+      });
     },
-    getShoppingProducts() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
-      this.isLoading = true;
-      this.$http.get(api)
-        .then((res) => {
-          this.isLoading = false;
-          if (res.data.success) {
-            this.products = res.data.products;
-          }
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
-    },
-  },
-  created() {
-    this.getShoppingProducts();
   },
 };
 </script>

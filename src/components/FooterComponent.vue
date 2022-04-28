@@ -24,7 +24,7 @@
                 <router-link to="/user/returnsQuestion">退換貨說明</router-link>
             </li>
         </ul>
-        <router-link to="/user/list/all">
+        <router-link to="/user/list">
             <img src="@/assets/images/cat.png" alt="毛孩一家一LOGO">
         </router-link>
     </footer>

@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import ToggleQuestion from '../components/ToggleQuestion.vue';
+import ToggleQuestion from '../../components/ToggleQuestion.vue';
 
 export default {
   components: {

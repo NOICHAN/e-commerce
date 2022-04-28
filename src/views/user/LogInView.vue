@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import ToggleLogInSignUp from '../components/ToggleLogInSignUp.vue';
+import ToggleLogInSignUp from '../../components/ToggleLogInSignUp.vue';
 
 export default {
   data() {

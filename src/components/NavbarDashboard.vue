@@ -66,7 +66,7 @@ export default {
       this.$http.post(api, this.user)
         .then((res) => {
           if (res.data.success) {
-            this.$router.push('/user/home');
+            this.$router.push('/');
           }
         });
     },

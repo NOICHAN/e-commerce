@@ -7,75 +7,53 @@ const routes = [
   },
   {
     path: '/user',
-    component: () => import('../views/UserBoard.vue'),
+    component: () => import('../views/user/UserBoard.vue'),
     children: [
       {
         path: 'list',
-        component: () => import('../views/ShoppingList.vue'),
-        children: [
-          {
-            path: 'all',
-            component: () => import('../views/ListAll.vue'),
-          },
-          {
-            path: 'feed',
-            component: () => import('../views/ListFeed.vue'),
-          },
-          {
-            path: 'canned',
-            component: () => import('../views/ListCanned.vue'),
-          },
-          {
-            path: 'toy',
-            component: () => import('../views/ListToy.vue'),
-          },
-          {
-            path: 'search',
-            component: () => import('../views/ListSearch.vue'),
-          },
-        ],
+        component: () => import('../views/user/ShoppingList.vue'),
       },
       {
-        path: 'product:productId',
-        component: () => import('../views/UserProduct.vue'),
+        path: 'product/:productId',
+        component: () => import('../views/user/ProductPage.vue'),
       },
       {
         path: 'login',
-        component: () => import('../views/LogInView.vue'),
+        component: () => import('../views/user/LogInView.vue'),
       },
       {
         path: 'signup',
-        component: () => import('../views/SignUpView.vue'),
+        component: () => import('../views/user/SignUpView.vue'),
       },
       {
         path: 'paymentQuestion',
-        component: () => import('../views/PaymentQuestionView.vue'),
+        component: () => import('../views/user/PaymentQuestionView.vue'),
       },
       {
         path: 'transportQuestion',
-        component: () => import('../views/TransportQuestionView.vue'),
+        component: () => import('../views/user/TransportQuestionView.vue'),
       },
       {
         path: 'returnsQuestion',
-        component: () => import('../views/ReturnsQuestionView.vue'),
+        component: () => import('../views/user/ReturnsQuestionView.vue'),
       },
     ],
   },
   {
     path: '/dashboard',
-    component: () => import('../views/DashboardView.vue'),
+    component: () => import('../views/dashboard/DashboardView.vue'),
     children: [
       {
         path: 'products',
-        component: () => import('../views/ProductsView.vue'),
+        component: () => import('../views/dashboard/ProductsView.vue'),
       },
       {
         path: 'orders',
-        component: () => import('../views/OrdersView.vue'),
+        component: () => import('../views/dashboard/OrdersView.vue'),
       },
       {
         path: 'coupons',
-        component: () => import('../views/CouponsView.vue'),
+        component: () => import('../views/dashboard/CouponsView.vue'),
       },
     ],
   },
