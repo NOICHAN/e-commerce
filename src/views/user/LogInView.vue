@@ -54,6 +54,7 @@ export default {
             const { token, expired } = res.data;
             document.cookie = `petToken=${token}; expires=${new Date(expired)}`;
             this.$router.push('/dashboard/products');
+            // console.log(123);
           } else {
             this.$alert('帳號或密碼錯誤。');
           }
