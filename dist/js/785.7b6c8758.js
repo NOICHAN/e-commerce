@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunke_commerce"]=self["webpackChunke_commerce"]||[]).push([[785],{5785:function(e,c,r){r.r(c),r.d(c,{default:function(){return f}});var s=r(3396);const n={class:"text-center"},t=(0,s._)("h1",{class:"display-3"},"404",-1),a=(0,s._)("p",{class:"display-5"},"sorry，這一頁找不到囉~",-1),u=[t,a];function i(e,c){return(0,s.wg)(),(0,s.iD)("div",n,u)}var l=r(89);const o={},d=(0,l.Z)(o,[["render",i]]);var f=d}}]);
-//# sourceMappingURL=785.7b6c8758.js.map
