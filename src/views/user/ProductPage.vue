@@ -56,7 +56,9 @@ export default {
   },
   watch: {
     product() {
-      this.feature = this.product.content.split('\n');
+      if (this.product.content !== undefined) {
+        this.feature = this.product.content.split('\n');
+      }
       this.discount = (Math.round((this.product.price / this.product.origin_price) * 100)) / 10;
     },
   },
@@ -70,7 +72,6 @@ export default {
           if (res.data.success) {
             this.product = res.data.product;
           }
-          console.log(this.product);
         })
         .catch(() => {
           this.isLoading = false;
