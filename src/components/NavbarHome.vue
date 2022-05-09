@@ -5,7 +5,7 @@
       <h1 class="mb-0">
         <router-link class="navbar-brand border-0 logo" to="/">毛孩一家一</router-link>
       </h1>
-      <button class="navbar-toggler fs-3" type="button"
+      <button class="navbar-toggler" type="button"
       data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -15,13 +15,16 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/user/list">產品列表</router-link>
           </li>
+           <li class="nav-item">
+            <router-link class="nav-link" to="/user/cart">購物車</router-link>
+          </li>
           <li class="nav-item">
             <router-link class="nav-link" to="/user/login">員工登入</router-link>
           </li>
         </ul>
       </div>
     </div>
-    <div class="d-flex w-75 rounded-pill bg-secondary">
+    <div class="d-flex w-75 rounded-pill bg-secondary height">
         <input class="form-control bg-secondary border-0 w-100 rounded-pill"
         type="search" placeholder="請輸入關鍵字" aria-label="Search" v-model="keywords">
         <button class="border-0 px-3 rounded-pill" type="button" @click="searchKeywords">
@@ -48,17 +51,23 @@ input[type="search"]:focus {
   border-color: #ececec;
   box-shadow: 0 1px 1px #ececec inset;
 }
+.height {
+  height: 25px;
+  @media(min-width: 576px){
+      height: 30px;
+    }
+}
 .logo {
-    width: 200px;
-    height: 54px;
+    width: 150px;
+    height: 41px;
     display: block;
     background-image: url('@/assets/images/logoCat-s.png');
     text-indent: 101%;
     white-space: nowrap;
     overflow: hidden;
     @media(min-width: 576px){
-      width: 300px;
-      height: 81px;
+      width: 200px;
+      height: 54px;
       background-image: url('@/assets/images/logoCat-m.png');
     }
 }

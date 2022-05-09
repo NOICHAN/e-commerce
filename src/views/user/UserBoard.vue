@@ -8,9 +8,9 @@
 
 <style scoped lang="scss">
 .mt {
-  margin-top: 114px;
+  margin-top: 90px;
   @media(min-width: 576px){
-      margin-top: 141px;
+      margin-top: 108px;
     }
 }
 </style>

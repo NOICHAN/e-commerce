@@ -7,12 +7,12 @@
   <table class="table mt-4">
   <thead>
     <tr>
-      <th width="120">分類</th>
+      <th width="70">分類</th>
       <th>標題</th>
-      <th width="120">原價</th>
-      <th width="120">售價</th>
+      <th width="115">原價</th>
+      <th width="115">售價</th>
       <th width="100">是否啟用</th>
-      <th width="200">編輯</th>
+      <th max-width="180" class="d-none d-sm-block border-0">編輯</th>
     </tr>
   </thead>
   <tbody>
@@ -29,7 +29,7 @@
         <span class="text-success" v-if="item.is_enabled">啟用</span>
         <span class="text-muted" v-else>未啟用</span>
       </td>
-      <td>
+      <td class="d-none d-sm-block">
         <div class="btn-group">
           <button class="btn btn-outline-info btn-sm"
           @click="openProductModal(false, item)">編輯</button>

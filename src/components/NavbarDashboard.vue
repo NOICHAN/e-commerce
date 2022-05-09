@@ -4,7 +4,7 @@
       <h2 class="mb-0">
         <router-link class="navbar-brand border-0 logo" to="/">毛孩一家一</router-link>
       </h2>
-      <button class="navbar-toggler fs-3" type="button"
+      <button class="navbar-toggler" type="button"
       data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -14,12 +14,12 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/dashboard/products">產品</router-link>
           </li>
-           <!-- <li class="nav-item">
+           <li class="nav-item">
             <router-link class="nav-link" to="/dashboard/orders">訂單</router-link>
           </li>
            <li class="nav-item">
             <router-link class="nav-link" to="/dashboard/coupons">優惠券</router-link>
-          </li> -->
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="#" @click.prevent="logout">登出</a>
           </li>
@@ -43,16 +43,16 @@ a {
         }
 }
 .logo {
-    width: 200px;
-    height: 54px;
+    width: 150px;
+    height: 41px;
     display: block;
     background-image: url('@/assets/images/logoCat-s.png');
     text-indent: 101%;
     white-space: nowrap;
     overflow: hidden;
     @media(min-width: 576px){
-      width: 300px;
-      height: 81px;
+      width: 200px;
+      height: 54px;
       background-image: url('@/assets/images/logoCat-m.png');
     }
 }

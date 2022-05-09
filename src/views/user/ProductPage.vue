@@ -23,12 +23,24 @@
     </div>
     <div class="col">
         <h3 class="text-center mb-5">{{ product.title }}</h3>
-        <strong><p>產品特色 : </p></strong>
+        <strong v-if="feature.length > 0"><p>產品特色 : </p></strong>
         <p v-for="item in feature" :key="item">{{ item }}</p>
-        <span class="text-dark text-decoration-line-through
-        me-3">原價 : ${{ product.origin_price }}</span>
-        <span class="text-danger fw-bold fs-5 me-3">優惠 : ${{ product.price }}</span>
-        <span class="badge rounded-pill bg-primary fs-6">約{{ discount }}折</span>
+        <span class="text-dark text-decoration-line-through me-3" v-if="discount !== 10">
+          原價 : ${{ $filters.currency(product.origin_price) }}</span>
+        <span class="text-danger fw-bold fs-5 me-3" v-if="discount !== 10">
+          優惠 : ${{ $filters.currency(product.price) }}</span>
+        <span class="text-danger fw-bold fs-5 me-3" v-else>
+          價格 : ${{ $filters.currency(product.price) }}</span>
+        <span class="badge rounded-pill bg-primary fs-6"
+        v-if="discount !== 10">約{{ discount }}折</span>
+        <br>
+        <label for="amount" class="d-flex align-items-center my-3">數量:
+          <button class="ms-5 symbol" :disabled="quantity === 1" @click="count(-1)">-</button>
+          <input id="amount" class="text-center" type="number" v-model="quantity">
+          <button class="symbol" @click="count(1)">+</button>
+        </label>
+        <button type="button" class="btn btn-outline-warning" @click="addSoppingCart">
+          <i class="bi bi-cart me-2 fs-5"></i>加入購物車</button>
     </div>
   </div>
 </template>
@@ -39,6 +51,22 @@
     }
     h3,p {
         color: #181b46;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+    input[type='number'] {
+        -moz-appearance: textfield;
+        width: 50px;
+        height: 32px;
+        border: 1px solid rgba(0,0,0,.09);
+      }
+    .symbol {
+      border: 1px solid rgba(0,0,0,.09);
+      background: #fff;
+      width: 32px;
+      height: 32px;
     }
 </style>
 
@@ -52,6 +80,7 @@ export default {
       active: 0,
       feature: [],
       discount: null,
+      quantity: 1,
     };
   },
   watch: {
@@ -60,6 +89,11 @@ export default {
         this.feature = this.product.content.split('\n');
       }
       this.discount = (Math.round((this.product.price / this.product.origin_price) * 100)) / 10;
+    },
+    quantity() {
+      if (this.quantity < 1) {
+        this.quantity = 1;
+      }
     },
   },
   methods: {
@@ -72,6 +106,26 @@ export default {
           if (res.data.success) {
             this.product = res.data.product;
           }
+        })
+        .catch(() => {
+          this.isLoading = false;
+          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        });
+    },
+    count(num) {
+      this.quantity += num;
+    },
+    addSoppingCart() {
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+      const cart = {
+        product_id: this.product.id,
+        qty: this.quantity,
+      };
+      this.isLoading = true;
+      this.$http.post(api, { data: cart })
+        .then(() => {
+          this.isLoading = false;
+          this.$alert(`${this.product.title} 已加入購物車`);
         })
         .catch(() => {
           this.isLoading = false;
