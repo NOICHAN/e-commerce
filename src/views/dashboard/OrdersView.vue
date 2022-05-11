@@ -8,22 +8,22 @@
         <th>購買款項</th>
         <th>應付金額</th>
         <th>是否付款</th>
-        <th>編輯</th>
+        <th class="d-none d-sm-block border-0">編輯</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="(item, key) in orders" :key="key">
-        <td>{{ $filters.date(item.create_at) }}</td>
-        <td>{{ item.user.email}}</td>
+        <td class="text-break">{{ $filters.date(item.create_at) }}</td>
+        <td class="text-break">{{ item.user.email}}</td>
         <td>
             <ul class="list-unstyled">
                 <li v-for="(product,key) in item.products" :key="key">
-                {{ product.title }} 數量：{{ product.qty }}
-                {{ product.unit }}
+                <p>{{ product.product.title }}</p><p> 數量：{{ product.qty }}
+                {{ product.unit }}</p>
                 </li>
             </ul>
         </td>
-        <td>{{ item.total }}</td>
+        <td class="text-nowrap">$ {{ $filters.currency(item.total) }}</td>
         <td>
              <div class="form-check form-switch">
               <input class="form-check-input" type="checkbox"
@@ -36,7 +36,7 @@
               </label>
             </div>
         </td>
-        <td>
+        <td class="d-none d-sm-table-cell">
             <div class="btn-group">
               <button class="btn btn-outline-info btn-sm"
               @click="openOrderModal(item)">檢視</button>
@@ -80,6 +80,7 @@ export default {
           this.isLoading = false;
           this.orders = res.data.orders;
           this.pagination = res.data.pagination;
+          console.log(this.orders.products);
         })
         .catch(() => {
           this.isLoading = false;

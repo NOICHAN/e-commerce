@@ -14,7 +14,7 @@
         <th>折扣百分比</th>
         <th>到期日</th>
         <th>是否啟用</th>
-        <th>編輯</th>
+        <th class="d-none d-sm-block">編輯</th>
       </tr>
       </thead>
       <tbody>
@@ -26,7 +26,7 @@
           <span class="text-success" v-if="item.is_enabled">啟用</span>
           <span class="text-muted" v-else>未起用</span>
         </td>
-        <td>
+        <td class="d-none d-sm-block">
           <div class="btn-group">
             <button class="btn btn-outline-info btn-sm" @click="openCouponModal(false,item)"
             >編輯</button>
@@ -111,18 +111,18 @@ export default {
           }).catch(() => {
             this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
           });
+      } else {
+        // 編輯
+        const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${item.id}`;
+        const httpMethod = 'put';
+        this.$http[httpMethod](api, { data: this.tempCoupon })
+          .then(() => {
+            couponComponent.hideModal();
+            this.getCoupons(this.pagination.current_page);
+          }).catch(() => {
+            this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+          });
       }
-
-      // 編輯
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${item.id}`;
-      const httpMethod = 'put';
-      this.$http[httpMethod](api, { data: this.tempCoupon })
-        .then(() => {
-          couponComponent.hideModal();
-          this.getCoupons(this.pagination.current_page);
-        }).catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
     },
     openDelCouponModal(item) {
       this.tempCoupon = { ...item };

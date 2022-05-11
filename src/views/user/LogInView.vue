@@ -6,9 +6,9 @@
         <h3 class="my-5 h1 text-primary fw-bold">會員登入</h3>
         <ToggleLogInSignUp></ToggleLogInSignUp>
         <div class="form-floating mb-4 w-75">
-          <v-field type="email" name="email" class="form-control"
+          <v-field type="email" class="form-control"
           id="floatingInput" placeholder="name@example.com"
-          v-model="user.username" rules="email|required"
+          v-model="user.username" name="email"  rules="email|required"
           :class="{ 'is-invalid': errors['email'] }"></v-field>
           <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
           <label for="floatingInput">Email 帳號</label>

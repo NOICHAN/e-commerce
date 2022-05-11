@@ -108,17 +108,17 @@ export default {
         }).catch(() => {
           this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
         });
+      } else {
+        // 編輯
+        const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`;
+        const httpMethod = 'put';
+        this.$http[httpMethod](api, { data: this.tempProduct }).then(() => {
+          productComponent.hideModal();
+          this.getProducts(this.pagination.current_page);
+        }).catch(() => {
+          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        });
       }
-
-      // 編輯
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`;
-      const httpMethod = 'put';
-      this.$http[httpMethod](api, { data: this.tempProduct }).then(() => {
-        productComponent.hideModal();
-        this.getProducts(this.pagination.current_page);
-      }).catch(() => {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-      });
     },
     openDelProductModal(item) {
       this.tempProduct = { ...item };
