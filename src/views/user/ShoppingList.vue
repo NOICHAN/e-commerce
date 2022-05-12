@@ -25,9 +25,9 @@
           </h3>
           <div class="card-text d-flex justify-content-between align-items-center">
             <span class="text-dark text-decoration-line-through">
-              ${{ $filters.currency(item.origin_price) }}</span>
+              $ {{ $filters.currency(item.origin_price) }}</span>
             <span class="text-danger fw-bold fs-5">
-              ${{ $filters.currency(item.price) }}</span>
+              $ {{ $filters.currency(item.price) }}</span>
           </div>
         </div>
       </div>

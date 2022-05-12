@@ -62,7 +62,29 @@
         </button>
       </div>
     </div>
-    <div class="row justify-content-center mt-5">
+    <h3 class="m-2 m-md-5">猜你喜歡<i class="bi bi-heart ms-2 text-danger"></i></h3>
+    <div class="row row-cols-2 row-cols-md-3 row-cols-xl-6 g-3 mb-5 mx-0 mx-md-4">
+      <div class="col" v-for="item in random" :key="item.id">
+        <div class="card h-100">
+          <img class="card-img-top d-flex flex-column justify-content-between cartCard"
+          :src="item.imageUrl" :alt="item.title">
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title">
+              <a href="#" class="stretched-link style"
+              @click.prevent="getProduct(item.id)">{{ item.title }}
+              </a>
+            </h5>
+            <div class="card-text d-flex justify-content-between align-items-center">
+            <span class="text-dark text-decoration-line-through">
+              ${{ $filters.currency(item.origin_price) }}</span>
+            <span class="text-danger fw-bold">
+              ${{ $filters.currency(item.price) }}</span>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
       <v-form class="form-floating col-8 col-md-5" v-slot="{ errors }"
       @submit="addOrder">
         <div class="form-floating mb-3">
@@ -133,7 +155,7 @@
   <p class="fs-5">你的購物車還是空的</p>
     <router-link class="btn btn-outline-warning mb-4" to="/user/list">去逛逛主子喜歡甚麼
     <i class="bi bi-hearts"></i></router-link>
-    <img src="@/assets/images/CartCat.jpg" alt="">
+    <img class="cartCat" src="@/assets/images/CartCat.jpg" alt="cat">
 </div>
 
 <DelModal :item="tempSoppingCart" ref="delModal" @del-item="delCart"></DelModal>
@@ -154,6 +176,13 @@
    flex: initial;
    width: 120px;
  }
+ .style {
+    color: #181b46;
+    text-decoration:none;
+    &:hover {
+        color: #fd9735;
+        }
+      }
  .title {
    width: 200px;
    @media(min-width: 576px) {
@@ -163,7 +192,10 @@
      width: 620px;
    }
  }
- img {
+.cartCard {
+        height: 100px;
+    }
+ .cartCat {
    max-width: 100%;
    height: auto;
  }
@@ -178,6 +210,8 @@ export default {
       isLoading: false,
       shoppingCarts: {},
       tempSoppingCart: {},
+      products: [],
+      random: [],
       code: '',
       form: {
         user: {
@@ -194,18 +228,38 @@ export default {
     DelModal,
   },
   methods: {
-    getShoppingCarts() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-      this.isLoading = true;
-      this.$http.get(api)
-        .then((res) => {
-          this.isLoading = false;
+    async getShoppingCarts() {
+      try {
+        const getAllCartUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+        this.isLoading = true;
+        const res = await this.$http.get(getAllCartUrl);
+        if (res.data.success) {
           this.shoppingCarts = res.data.data;
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+        } else {
+          throw new Error(JSON.stringify(res, null, 1));
+        }
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async getShoppingProducts() {
+      try {
+        const getAllProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
+        this.isLoading = true;
+        const res = await this.$http.get(getAllProductUrl);
+        if (res.data.success) {
+          this.products = res.data.products;
+        } else {
+          throw new Error(JSON.stringify(res, null, 1));
+        }
+      } catch (error) {
+        console.log(error);
+        this.$alert('1sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      } finally {
+        this.isLoading = false;
+      }
     },
     updateCart(item) {
       if (item.qty < 1) {
@@ -247,8 +301,7 @@ export default {
     addCoupon() {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`;
       this.$http.post(api, { data: { code: this.code } })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           this.code = '';
           this.getShoppingCarts();
         })
@@ -260,16 +313,60 @@ export default {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order`;
       this.$http.post(api, { data: this.form })
         .then((res) => {
-          console.log(res.data.orderId);
           this.$router.push(`/user/checkout/${res.data.orderId}`);
         })
         .catch(() => {
           this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
         });
     },
+    getRandom() {
+      const { carts } = this.shoppingCarts;
+      const filter = ['feed', 'canned', 'toy'];
+
+      for (let i = 0; i < carts.length; i += 1) {
+        const { category } = carts[i].product;
+        const categoryIndex = filter.indexOf(category);
+        if (categoryIndex !== -1) {
+          filter.splice(i, 1);
+        }
+        if (filter.length === 0) {
+          break;
+        }
+      }
+
+      for (let i = 0; i < filter.length; i += 1) {
+        const category = filter[i];
+        const filterResult = this.products.filter((e) => e.category === category);
+        for (let k = 0; k < 2; k += 1) {
+          const randomIndex = Math.floor(Math.random() * (filterResult.length));
+          this.random.push(filterResult[randomIndex]);
+          filterResult.splice(randomIndex, 1);
+        }
+      }
+
+      if (this.random.length < 6) {
+        for (let i = 0; this.random.length < 6; i += 1) {
+          const randomIndex = Math.floor(Math.random() * (this.products.length));
+          const product = this.products[randomIndex];
+          if (this.random.includes(product)) {
+            this.products.splice(randomIndex, 1);
+          } else {
+            this.random.push(product);
+            this.products.splice(randomIndex, 1);
+          }
+        }
+      }
+    },
+    getProduct(id) {
+      this.$router.push(`/user/product/${id}`);
+    },
   },
-  created() {
-    this.getShoppingCarts();
+  async created() {
+    await Promise.all([
+      this.getShoppingCarts(),
+      this.getShoppingProducts(),
+    ]);
+    this.getRandom();
   },
 };
 </script>
