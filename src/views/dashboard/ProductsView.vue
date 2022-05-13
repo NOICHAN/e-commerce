@@ -69,21 +69,20 @@ export default {
     Pagination,
   },
   methods: {
-    getProducts(page = 1) {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
-      this.isLoading = true;
-      this.$http.get(api)
-        .then((res) => {
-          this.isLoading = false;
-          if (res.data.success) {
-            this.products = res.data.products;
-            this.pagination = res.data.pagination;
-          }
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async getProducts(page = 1) {
+      try {
+        const getAllProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
+        this.isLoading = true;
+        const res = await this.$http.get(getAllProductUrl);
+        if (res.data.success) {
+          this.products = res.data.products;
+          this.pagination = res.data.pagination;
+        }
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      } finally {
+        this.isLoading = false;
+      }
     },
     openProductModal(isNew, item) {
       if (isNew) {
@@ -95,29 +94,28 @@ export default {
       const productComponent = this.$refs.productModal;
       productComponent.showModal();
     },
-    updateProduct(item) {
-      this.tempProduct = item;
+    async updateProduct(item) {
       const productComponent = this.$refs.productModal;
-      // 新增
-      if (this.isNew) {
-        const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
-        const httpMethod = 'post';
-        this.$http[httpMethod](api, { data: this.tempProduct }).then(() => {
-          productComponent.hideModal();
-          this.getProducts();
-        }).catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
-      } else {
-        // 編輯
-        const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`;
-        const httpMethod = 'put';
-        this.$http[httpMethod](api, { data: this.tempProduct }).then(() => {
-          productComponent.hideModal();
-          this.getProducts(this.pagination.current_page);
-        }).catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+      try {
+        this.tempProduct = item;
+        let httpMethod = '';
+        if (this.isNew) {
+          // 新增
+          const postProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
+          httpMethod = 'post';
+          await this.$http[httpMethod](postProductUrl, { data: this.tempProduct });
+          await this.getProducts();
+        } else {
+          // 編輯
+          const putProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`;
+          httpMethod = 'put';
+          await this.$http[httpMethod](putProductUrl, { data: this.tempProduct });
+          await this.getProducts(this.pagination.current_page);
+        }
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      } finally {
+        productComponent.hideModal();
       }
     },
     openDelProductModal(item) {
@@ -125,20 +123,20 @@ export default {
       const delComponent = this.$refs.delModal;
       delComponent.showModal();
     },
-    delProduct() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`;
-      this.$http.delete(api)
-        .then(() => {
-          const delComponent = this.$refs.delModal;
-          delComponent.hideModal();
-          this.getProducts(this.pagination.current_page);
-        }).catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async delProduct() {
+      try {
+        const deleteProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`;
+        await this.$http.delete(deleteProductUrl);
+        const delComponent = this.$refs.delModal;
+        delComponent.hideModal();
+        await this.getProducts(this.pagination.current_page);
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      }
     },
   },
-  created() {
-    this.getProducts();
+  async created() {
+    await this.getProducts();
   },
 };
 </script>

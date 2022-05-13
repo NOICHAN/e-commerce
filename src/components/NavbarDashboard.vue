@@ -61,14 +61,16 @@ a {
 <script>
 export default {
   methods: {
-    logout() {
-      const api = `${process.env.VUE_APP_API}logout`;
-      this.$http.post(api, this.user)
-        .then((res) => {
-          if (res.data.success) {
-            this.$router.push('/');
-          }
-        });
+    async logout() {
+      try {
+        const postLogoutUrl = `${process.env.VUE_APP_API}logout`;
+        const res = await this.$http.post(postLogoutUrl, this.user);
+        if (res.data.success) {
+          this.$router.push('/');
+        }
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      }
     },
   },
 };

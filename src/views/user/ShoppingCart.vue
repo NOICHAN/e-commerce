@@ -57,7 +57,7 @@
       <input type="text" class="form-control couponCode" placeholder="請輸入優惠碼" v-model="code">
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button"
-        @click="addCoupon">
+        @click="applyCoupon">
           套用優惠碼
         </button>
       </div>
@@ -86,7 +86,7 @@
     </div>
     <div class="row justify-content-center">
       <v-form class="form-floating col-8 col-md-5" v-slot="{ errors }"
-      @submit="addOrder">
+      @submit="sendOrder">
         <div class="form-floating mb-3">
           <v-field type="email" class="form-control"
           id="floatingInput" placeholder="請輸入 Email"
@@ -255,30 +255,27 @@ export default {
           throw new Error(JSON.stringify(res, null, 1));
         }
       } catch (error) {
-        console.log(error);
         this.$alert('1sorry，目前服務不可用，請稍後再試或聯絡管理員。');
       } finally {
         this.isLoading = false;
       }
     },
-    updateCart(item) {
-      if (item.qty < 1) {
-        this.$alert('數量不可為 0 或 負數');
-        return;
+    async updateCart(item) {
+      try {
+        if (item.qty < 1) {
+          this.$alert('數量不可為 0 或 負數');
+          return;
+        }
+        const updateCartUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
+        const cart = {
+          product_id: item.product_id,
+          qty: item.qty,
+        };
+        await this.$http.put(updateCartUrl, { data: cart });
+        await this.getShoppingCarts();
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
       }
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
-      const cart = {
-        product_id: item.product_id,
-        qty: item.qty,
-      };
-      this.$http.put(api, { data: cart })
-        .then(() => {
-          this.getShoppingCarts();
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
     },
     openDelCartModal(item) {
       this.tempSoppingCart = { ...item.product };
@@ -286,38 +283,35 @@ export default {
       const delComponent = this.$refs.delModal;
       delComponent.showModal();
     },
-    delCart() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${this.tempSoppingCart.cartId}`;
-      this.$http.delete(api)
-        .then(() => {
-          const delComponent = this.$refs.delModal;
-          delComponent.hideModal();
-          this.getShoppingCarts();
-        })
-        .catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async delCart() {
+      try {
+        const deleteProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${this.tempSoppingCart.cartId}`;
+        await this.$http.delete(deleteProductUrl);
+        const delComponent = this.$refs.delModal;
+        delComponent.hideModal();
+        await this.getShoppingCarts();
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      }
     },
-    addCoupon() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`;
-      this.$http.post(api, { data: { code: this.code } })
-        .then(() => {
-          this.code = '';
-          this.getShoppingCarts();
-        })
-        .catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async applyCoupon() {
+      try {
+        const applyCouponUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`;
+        await this.$http.post(applyCouponUrl, { data: { code: this.code } });
+        this.code = '';
+        await this.getShoppingCarts();
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      }
     },
-    addOrder() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order`;
-      this.$http.post(api, { data: this.form })
-        .then((res) => {
-          this.$router.push(`/user/checkout/${res.data.orderId}`);
-        })
-        .catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async sendOrder() {
+      try {
+        const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order`;
+        const res = await this.$http.post(api, { data: this.form });
+        this.$router.push(`/user/checkout/${res.data.orderId}`);
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      }
     },
     getRandom() {
       const { carts } = this.shoppingCarts;

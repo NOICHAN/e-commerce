@@ -97,45 +97,43 @@ export default {
     },
   },
   methods: {
-    getProduct() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${this.id}`;
-      this.isLoading = true;
-      this.$http.get(api)
-        .then((res) => {
-          this.isLoading = false;
-          if (res.data.success) {
-            this.product = res.data.product;
-          }
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async getProduct() {
+      try {
+        const getProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${this.id}`;
+        this.isLoading = true;
+        const res = await this.$http.get(getProductUrl);
+        if (res.data.success) {
+          this.product = res.data.product;
+        }
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      } finally {
+        this.isLoading = false;
+      }
     },
     count(num) {
       this.quantity += num;
     },
-    addSoppingCart() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-      const cart = {
-        product_id: this.product.id,
-        qty: this.quantity,
-      };
-      this.isLoading = true;
-      this.$http.post(api, { data: cart })
-        .then(() => {
-          this.isLoading = false;
-          this.$alert(`${this.product.title} 已加入購物車`);
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async addSoppingCart() {
+      try {
+        const addSoppingCartUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+        const cart = {
+          product_id: this.product.id,
+          qty: this.quantity,
+        };
+        this.isLoading = true;
+        await this.$http.post(addSoppingCartUrl, { data: cart });
+        this.$alert(`${this.product.title} 已加入購物車`);
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
-  created() {
+  async created() {
     this.id = this.$route.params.productId;
-    this.getProduct();
+    await this.getProduct();
   },
 };
 </script>

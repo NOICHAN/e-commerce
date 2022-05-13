@@ -46,21 +46,20 @@ export default {
     };
   },
   methods: {
-    signIn() {
-      const api = `${process.env.VUE_APP_API}admin/signin`;
-      this.$http.post(api, this.user)
-        .then((res) => {
-          if (res.data.success) {
-            const { token, expired } = res.data;
-            document.cookie = `petToken=${token}; expires=${new Date(expired)}`;
-            this.$router.push('/dashboard/products');
-          } else {
-            this.$alert('帳號或密碼錯誤。');
-          }
-        })
-        .catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async signIn() {
+      try {
+        const SignInUel = `${process.env.VUE_APP_API}admin/signin`;
+        const res = await this.$http.post(SignInUel, this.user);
+        if (res.data.success) {
+          const { token, expired } = res.data;
+          document.cookie = `petToken=${token}; expires=${new Date(expired)}`;
+          this.$router.push('/dashboard/products');
+        } else {
+          this.$alert('帳號或密碼錯誤。');
+        }
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      }
     },
   },
   components: {

@@ -72,56 +72,55 @@ export default {
     Pagination,
   },
   methods: {
-    getOrders(page = 1) {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/orders?page=${page}`;
-      this.isLoading = true;
-      this.$http.get(api)
-        .then((res) => {
-          this.isLoading = false;
+    async getOrders(page = 1) {
+      try {
+        const getAllOrderUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/orders?page=${page}`;
+        this.isLoading = true;
+        const res = await this.$http.get(getAllOrderUrl);
+        if (res.data.success) {
           this.orders = res.data.orders;
           this.pagination = res.data.pagination;
-          console.log(this.orders.products);
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+        }
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      } finally {
+        this.isLoading = false;
+      }
     },
     openOrderModal(item) {
       this.tempOrder = { ...item };
       const orderComponent = this.$refs.orderModal;
       orderComponent.showModal();
     },
-    updateOrder(item) {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${item.id}`;
-      const paid = { is_paid: item.is_paid };
-      this.$http.put(api, { data: paid })
-        .then(() => {
-          this.getOrders(this.pagination.current_page);
-        })
-        .catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async updateOrder(item) {
+      try {
+        const putOrderUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${item.id}`;
+        const paid = { is_paid: item.is_paid };
+        await this.$http.put(putOrderUrl, { data: paid });
+        await this.getOrders(this.pagination.current_page);
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      }
     },
     openDelOrderModal(item) {
       this.tempOrder = { ...item };
       const delComponent = this.$refs.delModal;
       delComponent.showModal();
     },
-    delOrder() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${this.tempOrder.id}`;
-      this.$http.delete(api)
-        .then(() => {
-          const delComponent = this.$refs.delModal;
-          delComponent.hideModal();
-          this.getOrders(this.pagination.current_page);
-        }).catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async delOrder() {
+      try {
+        const deleteOrderUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${this.tempOrder.id}`;
+        await this.$http.delete(deleteOrderUrl);
+        const delComponent = this.$refs.delModal;
+        delComponent.hideModal();
+        await this.getOrders(this.pagination.current_page);
+      } catch (error) {
+        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+      }
     },
   },
-  created() {
-    this.getOrders();
+  async created() {
+    await this.getOrders();
   },
 };
 </script>

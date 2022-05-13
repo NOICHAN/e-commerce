@@ -22,18 +22,20 @@ export default {
     Navbar,
     Footer,
   },
-  created() {
-    // 從 cookie 取出 token
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)petToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
-    // token 加到 Headers 裡面
-    this.$http.defaults.headers.common.Authorization = token;
-    const api = `${process.env.VUE_APP_API}api/user/check`;
-    this.$http.post(api)
-      .then((res) => {
-        if (!res.data.success) {
-          this.$router.push('/user/login');
-        }
-      });
+  async created() {
+    try {
+      // 從 cookie 取出 token
+      const token = document.cookie.replace(/(?:(?:^|.*;\s*)petToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
+      // token 加到 Headers 裡面
+      this.$http.defaults.headers.common.Authorization = token;
+      const postCheckUrl = `${process.env.VUE_APP_API}api/user/check`;
+      const res = await this.$http.post(postCheckUrl);
+      if (!res.data.success) {
+        this.$router.push('/user/login');
+      }
+    } catch (error) {
+      this.$alert('1sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+    }
   },
 };
 </script>
