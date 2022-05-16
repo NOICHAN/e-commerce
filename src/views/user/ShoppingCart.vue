@@ -263,7 +263,8 @@ export default {
     async updateCart(item) {
       try {
         if (item.qty < 1) {
-          this.$alert('數量不可為 0 或 負數');
+          await this.openDelCartModal(item);
+          await this.getShoppingCarts();
           return;
         }
         const updateCartUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
