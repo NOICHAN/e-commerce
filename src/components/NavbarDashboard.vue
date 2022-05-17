@@ -59,6 +59,8 @@ a {
 </style>
 
 <script>
+import errorHandler from '@/utils/errorHandler.js';
+
 export default {
   methods: {
     async logout() {
@@ -67,9 +69,11 @@ export default {
         const res = await this.$http.post(postLogoutUrl, this.user);
         if (res.data.success) {
           this.$router.push('/');
+        } else {
+          throw new Error('updateOrderFailed');
         }
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       }
     },
   },

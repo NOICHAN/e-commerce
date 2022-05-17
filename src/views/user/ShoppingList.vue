@@ -56,6 +56,8 @@
 </style>
 
 <script>
+import errorHandler from '@/utils/errorHandler.js';
+
 export default {
   data() {
     return {
@@ -86,15 +88,17 @@ export default {
   methods: {
     async getShoppingProducts() {
       try {
-        const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
+        const getAllShoppingProducts = `${this.$apiUrl}/products/all`;
         this.isLoading = true;
-        const res = await this.$http.get(api);
+        const res = await this.$http.get(getAllShoppingProducts);
         if (res.data.success) {
           this.products = res.data.products;
           this.filterProducts = this.products;
+        } else {
+          throw new Error('updateOrderFailed');
         }
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       } finally {
         this.isLoading = false;
       }
@@ -121,15 +125,8 @@ export default {
         this.$alert('欄位不可為空白');
       } else {
         this.active = '';
-        this.filterProducts = this.products.filter((item) => {
-          const titleResult = item.title.search(query);
-          if (titleResult === -1) {
-            return false;
-          }
-          return true;
-        });
+        this.filterProducts = this.products.filter((item) => item.title.includes(query));
       }
-      console.log(this.filterProducts);
     },
     getProduct(id) {
       this.$router.push(`/user/product/${id}`);

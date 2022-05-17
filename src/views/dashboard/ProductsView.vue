@@ -43,15 +43,16 @@
 <Pagination :pages="pagination" @emit-pages="getProducts"></Pagination>
 
 <ProductModal :product="tempProduct" ref="productModal"
-@update-product="updateProduct" ></ProductModal>
+@update-product="upsertProduct" ></ProductModal>
 
 <DelModal :item="tempProduct" ref="delModal" @del-item="delProduct"></DelModal>
 </template>
 
 <script>
-import ProductModal from '../../components/ProductModal.vue';
-import DelModal from '../../components/DelModal.vue';
-import Pagination from '../../components/PaginationComponent.vue';
+import ProductModal from '@/components/ProductModal.vue';
+import DelModal from '@/components/DelModal.vue';
+import Pagination from '@/components/PaginationComponent.vue';
+import errorHandler from '@/utils/errorHandler.js';
 
 export default {
   data() {
@@ -71,15 +72,17 @@ export default {
   methods: {
     async getProducts(page = 1) {
       try {
-        const getAllProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products?page=${page}`;
+        const getProductUrl = `${this.$apiUrl}/admin/products?page=${page}`;
         this.isLoading = true;
-        const res = await this.$http.get(getAllProductUrl);
+        const res = await this.$http.get(getProductUrl);
         if (res.data.success) {
           this.products = res.data.products;
           this.pagination = res.data.pagination;
+        } else {
+          throw new Error('updateOrderFailed');
         }
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       } finally {
         this.isLoading = false;
       }
@@ -94,27 +97,30 @@ export default {
       const productComponent = this.$refs.productModal;
       productComponent.showModal();
     },
-    async updateProduct(item) {
-      const productComponent = this.$refs.productModal;
+    async upsertProduct(item) {
       try {
+        // 預設新增
         this.tempProduct = item;
-        let httpMethod = '';
-        if (this.isNew) {
-          // 新增
-          const postProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
-          httpMethod = 'post';
-          await this.$http[httpMethod](postProductUrl, { data: this.tempProduct });
-          await this.getProducts();
-        } else {
+        let httpMethod = 'post';
+        let ProductUrl = `${this.$apiUrl}/admin/product`;
+        let currentPage = 1;
+
+        if (!this.isNew) {
           // 編輯
-          const putProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`;
+          ProductUrl = `${this.$apiUrl}/admin/product/${item.id}`;
           httpMethod = 'put';
-          await this.$http[httpMethod](putProductUrl, { data: this.tempProduct });
-          await this.getProducts(this.pagination.current_page);
+          currentPage = this.pagination.current_page;
         }
+
+        const res = await this.$http[httpMethod](ProductUrl, { data: this.tempProduct });
+        if (!res.data.success) {
+          throw new Error('updateOrderFailed');
+        }
+        await this.getProducts(currentPage);
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       } finally {
+        const productComponent = this.$refs.productModal;
         productComponent.hideModal();
       }
     },
@@ -125,13 +131,17 @@ export default {
     },
     async delProduct() {
       try {
-        const deleteProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${this.tempProduct.id}`;
-        await this.$http.delete(deleteProductUrl);
-        const delComponent = this.$refs.delModal;
-        delComponent.hideModal();
+        const deleteProductUrl = `${this.$apiUrl}/admin/product/${this.tempProduct.id}`;
+        const res = await this.$http.delete(deleteProductUrl);
+        if (!res.data.success) {
+          throw new Error('updateOrderFailed');
+        }
         await this.getProducts(this.pagination.current_page);
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
+      } finally {
+        const delComponent = this.$refs.delModal;
+        delComponent.hideModal();
       }
     },
   },

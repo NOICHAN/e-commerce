@@ -34,7 +34,8 @@
 </template>
 
 <script>
-import ToggleLogInSignUp from '../../components/ToggleLogInSignUp.vue';
+import ToggleLogInSignUp from '@/components/ToggleLogInSignUp.vue';
+import errorHandler from '@/utils/errorHandler.js';
 
 export default {
   data() {
@@ -58,7 +59,7 @@ export default {
           this.$alert('帳號或密碼錯誤。');
         }
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       }
     },
   },

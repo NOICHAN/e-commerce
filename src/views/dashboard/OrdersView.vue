@@ -53,9 +53,10 @@
 </template>
 
 <script>
-import OrderModal from '../../components/OrderModal.vue';
-import DelModal from '../../components/DelModal.vue';
-import Pagination from '../../components/PaginationComponent.vue';
+import OrderModal from '@/components/OrderModal.vue';
+import DelModal from '@/components/DelModal.vue';
+import Pagination from '@/components/PaginationComponent.vue';
+import errorHandler from '@/utils/errorHandler.js';
 
 export default {
   data() {
@@ -74,15 +75,17 @@ export default {
   methods: {
     async getOrders(page = 1) {
       try {
-        const getAllOrderUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/orders?page=${page}`;
+        const getOrderUrl = `${this.$apiUrl}/admin/orders?page=${page}`;
         this.isLoading = true;
-        const res = await this.$http.get(getAllOrderUrl);
+        const res = await this.$http.get(getOrderUrl);
         if (res.data.success) {
           this.orders = res.data.orders;
           this.pagination = res.data.pagination;
+        } else {
+          throw new Error('updateOrderFailed');
         }
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       } finally {
         this.isLoading = false;
       }
@@ -94,12 +97,16 @@ export default {
     },
     async updateOrder(item) {
       try {
-        const putOrderUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${item.id}`;
+        const putOrderUrl = `${this.$apiUrl}/admin/order/${item.id}`;
         const paid = { is_paid: item.is_paid };
-        await this.$http.put(putOrderUrl, { data: paid });
-        await this.getOrders(this.pagination.current_page);
+        const res = await this.$http.put(putOrderUrl, { data: paid });
+        if (!res.data.success) {
+          throw new Error('updateOrderFailed');
+        }
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
+      } finally {
+        await this.getOrders(this.pagination.current_page);
       }
     },
     openDelOrderModal(item) {
@@ -109,13 +116,17 @@ export default {
     },
     async delOrder() {
       try {
-        const deleteOrderUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${this.tempOrder.id}`;
-        await this.$http.delete(deleteOrderUrl);
-        const delComponent = this.$refs.delModal;
-        delComponent.hideModal();
+        const deleteOrderUrl = `${this.$apiUrl}/admin/order/${this.tempOrder.id}`;
+        const res = await this.$http.delete(deleteOrderUrl);
+        if (!res.data.success) {
+          throw new Error('updateOrderFailed');
+        }
         await this.getOrders(this.pagination.current_page);
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
+      } finally {
+        const delComponent = this.$refs.delModal;
+        delComponent.hideModal();
       }
     },
   },

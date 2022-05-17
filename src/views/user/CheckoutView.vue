@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import errorHandler from '@/utils/errorHandler.js';
+
 export default {
   data() {
     return {
@@ -73,27 +75,31 @@ export default {
   methods: {
     async getOrder() {
       try {
-        const getOrderUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order/${this.orderId}`;
+        const getOrderUrl = `${this.$apiUrl}/order/${this.orderId}`;
         this.isLoading = true;
         const res = await this.$http.get(getOrderUrl);
         if (res.data.success) {
           this.order = res.data.order;
+        } else {
+          throw new Error('updateOrderFailed');
         }
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       } finally {
         this.isLoading = false;
       }
     },
     async payOrder() {
       try {
-        const PayOrderUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/pay/${this.orderId}`;
+        const PayOrderUrl = `${this.$apiUrl}/pay/${this.orderId}`;
         const res = await this.$http.post(PayOrderUrl);
         if (res.data.success) {
           await this.getOrder();
+        } else {
+          throw new Error('updateOrderFailed');
         }
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       }
     },
   },

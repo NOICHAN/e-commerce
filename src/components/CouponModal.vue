@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import modalMixin from '@/mixins/modalMixin';
+import modalMixin from '@/mixins/modalMixin.js';
 
 export default {
   props: {

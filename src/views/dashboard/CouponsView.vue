@@ -40,16 +40,17 @@
   </div>
   <Pagination :pages="pagination" @emit-pages="getCoupons"></Pagination>
 
-  <CouponModal :coupon="tempCoupon" ref="couponModal" @update-coupon="updateCoupon"></CouponModal>
+  <CouponModal :coupon="tempCoupon" ref="couponModal" @update-coupon="upsertCoupon"></CouponModal>
 
   <DelModal :item="tempCoupon" ref="delModal"
   @del-item="delCoupon"></DelModal>
 </template>
 
 <script>
-import CouponModal from '../../components/CouponModal.vue';
-import DelModal from '../../components/DelModal.vue';
-import Pagination from '../../components/PaginationComponent.vue';
+import errorHandler from '@/utils/errorHandler.js';
+import CouponModal from '@/components/CouponModal.vue';
+import DelModal from '@/components/DelModal.vue';
+import Pagination from '@/components/PaginationComponent.vue';
 
 export default {
   data() {
@@ -69,15 +70,17 @@ export default {
   methods: {
     async getCoupons(page = 1) {
       try {
-        const getAllCouponUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupons?page=${page}`;
+        const getCouponUrl = `${this.$apiUrl}/admin/coupons?page=${page}`;
         this.isLoading = true;
-        const res = await this.$http.get(getAllCouponUrl);
+        const res = await this.$http.get(getCouponUrl);
         if (res.data.success) {
           this.coupons = res.data.coupons;
           this.pagination = res.data.pagination;
+        } else {
+          throw new Error('updateOrderFailed');
         }
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       } finally {
         this.isLoading = false;
       }
@@ -96,28 +99,31 @@ export default {
       const couponComponent = this.$refs.couponModal;
       couponComponent.showModal();
     },
-    async updateCoupon(item) {
-      const couponComponent = this.$refs.couponModal;
+    async upsertCoupon(item) {
       try {
+        // 預設新增
         this.tempCoupon = item;
-        let httpMethod = '';
-        if (this.isNew) {
-          // 新增
-          const postCouponUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`;
-          httpMethod = 'post';
-          await this.$http[httpMethod](postCouponUrl, { data: this.tempCoupon });
-          await this.getCoupons();
-        } else {
+        let httpMethod = 'post';
+        let currentPage = 1;
+        let couponUrl = `${this.$apiUrl}/admin/coupon`;
+
+        if (!this.isNew) {
           // 編輯
-          const putCouponUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${item.id}`;
+          couponUrl = `${this.$apiUrl}/admin/coupon/${item.id}`;
           httpMethod = 'put';
-          await this.$http[httpMethod](putCouponUrl, { data: this.tempCoupon });
-          await this.getCoupons(this.pagination.current_page);
+          currentPage = this.pagination.current_page;
         }
+
+        const res = await this.$http[httpMethod](couponUrl, { data: this.tempCoupon });
+        if (!res.data.success) {
+          throw new Error('updateOrderFailed');
+        }
+        await this.getCoupons(currentPage);
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       } finally {
-        await couponComponent.hideModal();
+        const couponComponent = this.$refs.couponModal;
+        couponComponent.hideModal();
       }
     },
     openDelCouponModal(item) {
@@ -127,13 +133,17 @@ export default {
     },
     async delCoupon() {
       try {
-        const deleteCouponUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`;
-        await this.$http.delete(deleteCouponUrl);
-        const delComponent = this.$refs.delModal;
-        delComponent.hideModal();
+        const deleteCouponUrl = `${this.$apiUrl}/admin/coupon/${this.tempCoupon.id}`;
+        const res = await this.$http.delete(deleteCouponUrl);
+        if (!res.data.success) {
+          throw new Error('updateOrderFailed');
+        }
         await this.getCoupons(this.pagination.current_page);
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
+      } finally {
+        const delComponent = this.$refs.delModal;
+        delComponent.hideModal();
       }
     },
   },
