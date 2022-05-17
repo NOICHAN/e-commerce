@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import errorHandler from '@/utils/errorHandler.js';
+
 export default {
   data() {
     return {
@@ -71,37 +73,39 @@ export default {
     };
   },
   methods: {
-    getOrder() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order/${this.orderId}`;
-      this.$http.get(api)
-        .then((res) => {
-          if (res.data.success) {
-            this.order = res.data.order;
-            console.log(this.order);
-          }
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async getOrder() {
+      try {
+        const getOrderUrl = `${this.$apiUrl}/order/${this.orderId}`;
+        this.isLoading = true;
+        const res = await this.$http.get(getOrderUrl);
+        if (res.data.success) {
+          this.order = res.data.order;
+        } else {
+          throw new Error('updateOrderFailed');
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      } finally {
+        this.isLoading = false;
+      }
     },
-    payOrder() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/pay/${this.orderId}`;
-      this.$http.post(api)
-        .then((res) => {
-          if (res.data.success) {
-            this.getOrder();
-          }
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async payOrder() {
+      try {
+        const PayOrderUrl = `${this.$apiUrl}/pay/${this.orderId}`;
+        const res = await this.$http.post(PayOrderUrl);
+        if (res.data.success) {
+          await this.getOrder();
+        } else {
+          throw new Error('updateOrderFailed');
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      }
     },
   },
-  created() {
+  async created() {
     this.orderId = this.$route.params.orderId;
-    this.getOrder();
+    await this.getOrder();
   },
 };
 </script>

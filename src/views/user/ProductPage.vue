@@ -39,7 +39,7 @@
           <input id="amount" class="text-center" type="number" v-model="quantity">
           <button class="symbol" @click="count(1)">+</button>
         </label>
-        <button type="button" class="btn btn-outline-warning" @click="addSoppingCart">
+        <button type="button" class="btn btn-outline-warning" @click="addProductToShoppingCart">
           <i class="bi bi-cart me-2 fs-5"></i>加入購物車</button>
     </div>
   </div>
@@ -71,6 +71,8 @@
 </style>
 
 <script>
+import errorHandler from '@/utils/errorHandler.js';
+
 export default {
   data() {
     return {
@@ -97,45 +99,49 @@ export default {
     },
   },
   methods: {
-    getProduct() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${this.id}`;
-      this.isLoading = true;
-      this.$http.get(api)
-        .then((res) => {
-          this.isLoading = false;
-          if (res.data.success) {
-            this.product = res.data.product;
-          }
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async getProduct() {
+      try {
+        const getProductUrl = `${this.$apiUrl}/product/${this.id}`;
+        this.isLoading = true;
+        const res = await this.$http.get(getProductUrl);
+        if (res.data.success) {
+          this.product = res.data.product;
+        } else {
+          throw new Error('updateOrderFailed');
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      } finally {
+        this.isLoading = false;
+      }
     },
     count(num) {
       this.quantity += num;
     },
-    addSoppingCart() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
-      const cart = {
-        product_id: this.product.id,
-        qty: this.quantity,
-      };
-      this.isLoading = true;
-      this.$http.post(api, { data: cart })
-        .then(() => {
-          this.isLoading = false;
+    async addProductToShoppingCart() {
+      try {
+        const addProductToShoppingCartUrl = `${this.$apiUrl}/cart`;
+        const cart = {
+          product_id: this.product.id,
+          qty: this.quantity,
+        };
+        this.isLoading = true;
+        const res = await this.$http.post(addProductToShoppingCartUrl, { data: cart });
+        if (res.data.success) {
           this.$alert(`${this.product.title} 已加入購物車`);
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+        } else {
+          throw new Error('updateOrderFailed');
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
-  created() {
+  async created() {
     this.id = this.$route.params.productId;
-    this.getProduct();
+    await this.getProduct();
   },
 };
 </script>

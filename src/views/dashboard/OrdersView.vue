@@ -53,9 +53,10 @@
 </template>
 
 <script>
-import OrderModal from '../../components/OrderModal.vue';
-import DelModal from '../../components/DelModal.vue';
-import Pagination from '../../components/PaginationComponent.vue';
+import OrderModal from '@/components/OrderModal.vue';
+import DelModal from '@/components/DelModal.vue';
+import Pagination from '@/components/PaginationComponent.vue';
+import errorHandler from '@/utils/errorHandler.js';
 
 export default {
   data() {
@@ -72,56 +73,65 @@ export default {
     Pagination,
   },
   methods: {
-    getOrders(page = 1) {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/orders?page=${page}`;
-      this.isLoading = true;
-      this.$http.get(api)
-        .then((res) => {
-          this.isLoading = false;
+    async getOrders(page = 1) {
+      try {
+        const getOrderUrl = `${this.$apiUrl}/admin/orders?page=${page}`;
+        this.isLoading = true;
+        const res = await this.$http.get(getOrderUrl);
+        if (res.data.success) {
           this.orders = res.data.orders;
           this.pagination = res.data.pagination;
-          console.log(this.orders.products);
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+        } else {
+          throw new Error('updateOrderFailed');
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      } finally {
+        this.isLoading = false;
+      }
     },
     openOrderModal(item) {
       this.tempOrder = { ...item };
       const orderComponent = this.$refs.orderModal;
       orderComponent.showModal();
     },
-    updateOrder(item) {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${item.id}`;
-      const paid = { is_paid: item.is_paid };
-      this.$http.put(api, { data: paid })
-        .then(() => {
-          this.getOrders(this.pagination.current_page);
-        })
-        .catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async updateOrder(item) {
+      try {
+        const putOrderUrl = `${this.$apiUrl}/admin/order/${item.id}`;
+        const paid = { is_paid: item.is_paid };
+        const res = await this.$http.put(putOrderUrl, { data: paid });
+        if (!res.data.success) {
+          throw new Error('updateOrderFailed');
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      } finally {
+        await this.getOrders(this.pagination.current_page);
+      }
     },
     openDelOrderModal(item) {
       this.tempOrder = { ...item };
       const delComponent = this.$refs.delModal;
       delComponent.showModal();
     },
-    delOrder() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/order/${this.tempOrder.id}`;
-      this.$http.delete(api)
-        .then(() => {
-          const delComponent = this.$refs.delModal;
-          delComponent.hideModal();
-          this.getOrders(this.pagination.current_page);
-        }).catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async delOrder() {
+      try {
+        const deleteOrderUrl = `${this.$apiUrl}/admin/order/${this.tempOrder.id}`;
+        const res = await this.$http.delete(deleteOrderUrl);
+        if (!res.data.success) {
+          throw new Error('updateOrderFailed');
+        }
+        await this.getOrders(this.pagination.current_page);
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      } finally {
+        const delComponent = this.$refs.delModal;
+        delComponent.hideModal();
+      }
     },
   },
-  created() {
-    this.getOrders();
+  async created() {
+    await this.getOrders();
   },
 };
 </script>

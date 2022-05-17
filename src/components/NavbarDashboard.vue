@@ -59,16 +59,22 @@ a {
 </style>
 
 <script>
+import errorHandler from '@/utils/errorHandler.js';
+
 export default {
   methods: {
-    logout() {
-      const api = `${process.env.VUE_APP_API}logout`;
-      this.$http.post(api, this.user)
-        .then((res) => {
-          if (res.data.success) {
-            this.$router.push('/');
-          }
-        });
+    async logout() {
+      try {
+        const postLogoutUrl = `${process.env.VUE_APP_API}logout`;
+        const res = await this.$http.post(postLogoutUrl, this.user);
+        if (res.data.success) {
+          this.$router.push('/');
+        } else {
+          throw new Error('updateOrderFailed');
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      }
     },
   },
 };

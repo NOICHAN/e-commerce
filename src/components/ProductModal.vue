@@ -153,7 +153,8 @@
 </template>
 
 <script>
-import modalMixin from '@/mixins/modalMixin';
+import modalMixin from '@/mixins/modalMixin.js';
+import errorHandler from '@/utils/errorHandler.js';
 
 export default {
   props: {
@@ -178,22 +179,21 @@ export default {
   },
   mixins: [modalMixin],
   methods: {
-    uploadFile() {
-      const uploadFile = this.$refs.fileInput.files[0];
-      const formData = new FormData();
-      formData.append('file-to-upload', uploadFile);
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`;
-      this.$http.post(api, formData)
-        .then((res) => {
-          if (res.data.success) {
-            this.tempProduct.imageUrl = res.data.imageUrl;
-          } else {
-            this.$alert('上傳檔案格式錯誤或檔案過大，請選擇其它檔案並再次嘗試。');
-          }
-        })
-        .catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async uploadFile() {
+      try {
+        const uploadFile = this.$refs.fileInput.files[0];
+        const formData = new FormData();
+        formData.append('file-to-upload', uploadFile);
+        const postImageUrl = `${this.$apiUrl}/admin/upload`;
+        const res = await this.$http.post(postImageUrl, formData);
+        if (res.data.success) {
+          this.tempProduct.imageUrl = res.data.imageUrl;
+        } else {
+          this.$alert('上傳檔案格式錯誤或檔案過大，請選擇其它檔案並再次嘗試。');
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      }
     },
   },
 };

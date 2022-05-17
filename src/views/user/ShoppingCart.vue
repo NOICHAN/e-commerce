@@ -57,7 +57,7 @@
       <input type="text" class="form-control couponCode" placeholder="請輸入優惠碼" v-model="code">
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button"
-        @click="addCoupon">
+        @click="applyCoupon">
           套用優惠碼
         </button>
       </div>
@@ -86,7 +86,7 @@
     </div>
     <div class="row justify-content-center">
       <v-form class="form-floating col-8 col-md-5" v-slot="{ errors }"
-      @submit="addOrder">
+      @submit="sendOrder">
         <div class="form-floating mb-3">
           <v-field type="email" class="form-control"
           id="floatingInput" placeholder="請輸入 Email"
@@ -202,7 +202,8 @@
 </style>
 
 <script>
-import DelModal from '../../components/DelModal.vue';
+import DelModal from '@/components/DelModal.vue';
+import errorHandler from '@/utils/errorHandler.js';
 
 export default {
   data() {
@@ -230,55 +231,56 @@ export default {
   methods: {
     async getShoppingCarts() {
       try {
-        const getAllCartUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`;
+        const getAllCartUrl = `${this.$apiUrl}/cart`;
         this.isLoading = true;
         const res = await this.$http.get(getAllCartUrl);
         if (res.data.success) {
           this.shoppingCarts = res.data.data;
         } else {
-          throw new Error(JSON.stringify(res, null, 1));
+          throw new Error('updateOrderFailed');
         }
       } catch (error) {
-        this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       } finally {
         this.isLoading = false;
       }
     },
     async getShoppingProducts() {
       try {
-        const getAllProductUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`;
+        const getAllProductUrl = `${this.$apiUrl}/products/all`;
         this.isLoading = true;
         const res = await this.$http.get(getAllProductUrl);
         if (res.data.success) {
           this.products = res.data.products;
         } else {
-          throw new Error(JSON.stringify(res, null, 1));
+          throw new Error('updateOrderFailed');
         }
       } catch (error) {
-        console.log(error);
-        this.$alert('1sorry，目前服務不可用，請稍後再試或聯絡管理員。');
+        errorHandler(this.$alert, error.message);
       } finally {
         this.isLoading = false;
       }
     },
-    updateCart(item) {
-      if (item.qty < 1) {
-        this.$alert('數量不可為 0 或 負數');
-        return;
+    async updateCart(item) {
+      try {
+        if (item.qty < 1) {
+          await this.openDelCartModal(item);
+        } else {
+          const updateCartUrl = `${this.$apiUrl}/cart/${item.id}`;
+          const cart = {
+            product_id: item.product_id,
+            qty: item.qty,
+          };
+          const res = await this.$http.put(updateCartUrl, { data: cart });
+          if (!res.data.success) {
+            throw new Error('updateOrderFailed');
+          }
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      } finally {
+        await this.getShoppingCarts();
       }
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`;
-      const cart = {
-        product_id: item.product_id,
-        qty: item.qty,
-      };
-      this.$http.put(api, { data: cart })
-        .then(() => {
-          this.getShoppingCarts();
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
     },
     openDelCartModal(item) {
       this.tempSoppingCart = { ...item.product };
@@ -286,38 +288,47 @@ export default {
       const delComponent = this.$refs.delModal;
       delComponent.showModal();
     },
-    delCart() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${this.tempSoppingCart.cartId}`;
-      this.$http.delete(api)
-        .then(() => {
-          const delComponent = this.$refs.delModal;
-          delComponent.hideModal();
-          this.getShoppingCarts();
-        })
-        .catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+    async delCart() {
+      try {
+        const deleteProductUrl = `${this.$apiUrl}/cart/${this.tempSoppingCart.cartId}`;
+        const res = await this.$http.delete(deleteProductUrl);
+        if (!res.data.success) {
+          throw new Error('updateOrderFailed');
+        }
+        await this.getShoppingCarts();
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      } finally {
+        const delComponent = this.$refs.delModal;
+        delComponent.hideModal();
+      }
     },
-    addCoupon() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`;
-      this.$http.post(api, { data: { code: this.code } })
-        .then(() => {
+    async applyCoupon() {
+      try {
+        const applyCouponUrl = `${this.$apiUrl}/coupon`;
+        const res = await this.$http.post(applyCouponUrl, { data: { code: this.code } });
+        if (res.data.success) {
           this.code = '';
-          this.getShoppingCarts();
-        })
-        .catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+          await this.getShoppingCarts();
+        } else {
+          throw new Error('updateOrderFailed');
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      }
     },
-    addOrder() {
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order`;
-      this.$http.post(api, { data: this.form })
-        .then((res) => {
+    async sendOrder() {
+      try {
+        const api = `${this.$apiUrl}/order`;
+        const res = await this.$http.post(api, { data: this.form });
+        if (res.data.success) {
           this.$router.push(`/user/checkout/${res.data.orderId}`);
-        })
-        .catch(() => {
-          this.$alert('sorry，目前服務不可用，請稍後再試或聯絡管理員。');
-        });
+        } else {
+          throw new Error('updateOrderFailed');
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      }
     },
     getRandom() {
       const { carts } = this.shoppingCarts;

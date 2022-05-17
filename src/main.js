@@ -16,8 +16,8 @@ import VueSimpleAlert from 'vue3-simple-alert-next';
 import Loading from 'vue3-loading-overlay';
 import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
 import App from './App.vue';
-import router from './router';
-import { currency, date } from './methods/filters';
+import router from './router/index.js';
+import { currency, date } from './methods/filters.js';
 
 defineRule('required', required);
 defineRule('email', email);
@@ -36,6 +36,8 @@ app.config.globalProperties.$filters = {
   currency,
   date,
 };
+
+app.config.globalProperties.$apiUrl = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}`;
 
 app.use(VueAxios, axios);
 app.use(router);
