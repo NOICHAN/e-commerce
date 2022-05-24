@@ -13,14 +13,22 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" to="/user/list">產品列表</router-link>
+            <router-link class="nav-link" to="/user/list">商品</router-link>
           </li>
-           <li class="nav-item">
-            <router-link class="nav-link" to="/user/cart">購物車</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/user/login">員工登入</router-link>
-          </li>
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#"
+          id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Q&A
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><router-link class="dropdown-item"
+            to="/user/paymentQuestion">付款相關問題</router-link></li>
+            <li><router-link class="dropdown-item"
+            to="/user/transportQuestion">運送相關問題</router-link></li>
+            <li><router-link class="dropdown-item"
+            to="/user/returnsQuestion">退換貨說明</router-link></li>
+          </ul>
+        </li>
         </ul>
       </div>
     </div>

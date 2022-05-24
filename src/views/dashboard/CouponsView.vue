@@ -1,5 +1,5 @@
 <template>
-<VLoading :active="isLoading"></VLoading>
+<Loading :loading="isLoading"></Loading>
   <div>
     <div class="text-end">
       <button class="btn btn-outline-primary mt-2"
@@ -51,6 +51,7 @@ import errorHandler from '@/utils/errorHandler.js';
 import CouponModal from '@/components/CouponModal.vue';
 import DelModal from '@/components/DelModal.vue';
 import Pagination from '@/components/PaginationComponent.vue';
+import Loading from '@/components/LoadingComponent.vue';
 
 export default {
   data() {
@@ -66,6 +67,7 @@ export default {
     CouponModal,
     DelModal,
     Pagination,
+    Loading,
   },
   methods: {
     async getCoupons(page = 1) {
@@ -147,7 +149,7 @@ export default {
       }
     },
   },
-  async created() {
+  async mounted() {
     await this.getCoupons();
   },
 };

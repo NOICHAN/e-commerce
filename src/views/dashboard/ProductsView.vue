@@ -1,5 +1,5 @@
 <template>
-<VLoading :active="isLoading"></VLoading>
+<Loading :loading="isLoading"></Loading>
 <div class="text-end">
   <button class="btn btn-outline-primary mt-2" type="button"
   @click="openProductModal(true)">新增產品</button>
@@ -53,6 +53,7 @@ import ProductModal from '@/components/ProductModal.vue';
 import DelModal from '@/components/DelModal.vue';
 import Pagination from '@/components/PaginationComponent.vue';
 import errorHandler from '@/utils/errorHandler.js';
+import Loading from '@/components/LoadingComponent.vue';
 
 export default {
   data() {
@@ -68,6 +69,7 @@ export default {
     ProductModal,
     DelModal,
     Pagination,
+    Loading,
   },
   methods: {
     async getProducts(page = 1) {
@@ -145,7 +147,7 @@ export default {
       }
     },
   },
-  async created() {
+  async mounted() {
     await this.getProducts();
   },
 };

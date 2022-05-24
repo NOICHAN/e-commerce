@@ -16,14 +16,14 @@ a {
     border-bottom: 3px solid #aaa;
 
     &:hover {
-        color: #ff6745;
-        border-bottom: 3px solid #ff6745;
+        color: #0dcaf0;
+        border-bottom: 3px solid #0dcaf0;
         }
 
     &.active {
         text-decoration: none;
-        color: #ff6745;
-        border-bottom: 3px solid #ff6745;
+        color: #0dcaf0;
+        border-bottom: 3px solid #0dcaf0;
         }
 }
 </style>

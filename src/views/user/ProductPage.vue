@@ -1,12 +1,12 @@
 <template>
-<VLoading :active="isLoading"></VLoading>
+<Loading :loading="isLoading"></Loading>
   <div class="row row-cols-1 row-cols-md-2 bg-white py-5 gy-5">
     <div class="col">
       <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item" v-for="(img, key) in product.imagesUrl"
           :key="img" :class="{active: active === key}">
-            <img :src="img" class="d-block w-100" alt="img">
+            <img :src="img" class="d-block" alt="img">
           </div>
         </div>
         <button class="carousel-control-prev" type="button"
@@ -31,7 +31,7 @@
           優惠 : ${{ $filters.currency(product.price) }}</span>
         <span class="text-danger fw-bold fs-5 me-3" v-else>
           價格 : ${{ $filters.currency(product.price) }}</span>
-        <span class="badge rounded-pill bg-primary fs-6"
+        <span class="badge rounded-pill bg-info fs-6"
         v-if="discount !== 10">約{{ discount }}折</span>
         <br>
         <label for="amount" class="d-flex align-items-center my-3">數量:
@@ -39,15 +39,19 @@
           <input id="amount" class="text-center" type="number" v-model="quantity">
           <button class="symbol" @click="count(1)">+</button>
         </label>
-        <button type="button" class="btn btn-outline-warning" @click="addProductToShoppingCart">
-          <i class="bi bi-cart me-2 fs-5"></i>加入購物車</button>
+        <button type="button" class="btn btn-outline-info" @click="addProductToShoppingCart">
+          <i class="bi bi-cart-plus me-2 fs-5"></i>加入購物車</button>
     </div>
   </div>
+  <Cart class="position-fixed fixed"></Cart>
 </template>
 
 <style scoped lang="scss">
     img {
-        height: 500px;
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+        object-position: center center;
     }
     h3,p {
         color: #181b46;
@@ -68,10 +72,16 @@
       width: 32px;
       height: 32px;
     }
+    .fixed {
+      bottom: 20%;
+      right: 3%;
+    }
 </style>
 
 <script>
 import errorHandler from '@/utils/errorHandler.js';
+import Loading from '@/components/LoadingComponent.vue';
+import Cart from '@/components/ShoppingCartIcon.vue';
 
 export default {
   data() {
@@ -84,6 +94,10 @@ export default {
       discount: null,
       quantity: 1,
     };
+  },
+  components: {
+    Loading,
+    Cart,
   },
   watch: {
     product() {
@@ -139,7 +153,7 @@ export default {
       }
     },
   },
-  async created() {
+  async mounted() {
     this.id = this.$route.params.productId;
     await this.getProduct();
   },

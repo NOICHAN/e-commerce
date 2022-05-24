@@ -1,5 +1,5 @@
 <template>
-  <VLoading :active="isLoading"></VLoading>
+  <Loading :loading="isLoading"></Loading>
   <div class="row justify-content-center bg-white py-5">
     <div class="col-5">
       <table class="table mb-5">
@@ -61,6 +61,7 @@
 
 <script>
 import errorHandler from '@/utils/errorHandler.js';
+import Loading from '@/components/LoadingComponent.vue';
 
 export default {
   data() {
@@ -71,6 +72,9 @@ export default {
       orderId: '',
       isLoading: false,
     };
+  },
+  components: {
+    Loading,
   },
   methods: {
     async getOrder() {
@@ -103,7 +107,7 @@ export default {
       }
     },
   },
-  async created() {
+  async mounted() {
     this.orderId = this.$route.params.orderId;
     await this.getOrder();
   },

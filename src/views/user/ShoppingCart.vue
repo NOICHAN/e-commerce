@@ -1,5 +1,5 @@
 <template>
-    <VLoading :active="isLoading"></VLoading>
+    <Loading :loading="isLoading"></Loading>
 <div class="bg-white py-5" v-if="shoppingCarts.total !== 0">
   <table class="table">
   <thead>
@@ -165,6 +165,12 @@
  td {
    vertical-align:middle;
  }
+ img {
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+        object-position: center center;
+    }
  .num {
    flex: initial;
    width: 50px;
@@ -204,6 +210,7 @@
 <script>
 import DelModal from '@/components/DelModal.vue';
 import errorHandler from '@/utils/errorHandler.js';
+import Loading from '@/components/LoadingComponent.vue';
 
 export default {
   data() {
@@ -227,6 +234,7 @@ export default {
   },
   components: {
     DelModal,
+    Loading,
   },
   methods: {
     async getShoppingCarts() {
@@ -305,6 +313,10 @@ export default {
     },
     async applyCoupon() {
       try {
+        if (!this.code) {
+          this.$alert('優惠券代碼不可為空白');
+          return;
+        }
         const applyCouponUrl = `${this.$apiUrl}/coupon`;
         const res = await this.$http.post(applyCouponUrl, { data: { code: this.code } });
         if (res.data.success) {
@@ -372,7 +384,7 @@ export default {
       this.$router.push(`/user/product/${id}`);
     },
   },
-  async created() {
+  async mounted() {
     await Promise.all([
       this.getShoppingCarts(),
       this.getShoppingProducts(),

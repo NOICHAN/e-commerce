@@ -1,5 +1,5 @@
 <template>
-  <VLoading :active="isLoading"></VLoading>
+  <Loading :loading="isLoading"></Loading>
   <table class="table">
     <thead>
       <tr>
@@ -57,6 +57,7 @@ import OrderModal from '@/components/OrderModal.vue';
 import DelModal from '@/components/DelModal.vue';
 import Pagination from '@/components/PaginationComponent.vue';
 import errorHandler from '@/utils/errorHandler.js';
+import Loading from '@/components/LoadingComponent.vue';
 
 export default {
   data() {
@@ -71,6 +72,7 @@ export default {
     OrderModal,
     DelModal,
     Pagination,
+    Loading,
   },
   methods: {
     async getOrders(page = 1) {
@@ -130,7 +132,7 @@ export default {
       }
     },
   },
-  async created() {
+  async mounted() {
     await this.getOrders();
   },
 };
