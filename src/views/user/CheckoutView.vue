@@ -49,7 +49,12 @@
       </div>
       <div class="d-flex justify-content-between align-items-center fs-5 mb-2">
         <strong class="text-nowrap">總計</strong>
-        <strong class="text-nowrap text-danger">$ {{ $filters.currency(order.total) }}</strong>
+        <strong v-if="order.is_paid" class="text-nowrap text-success">
+          $ {{ $filters.currency(order.total) }}
+        </strong>
+        <strong v-else class="text-nowrap text-danger">
+          $ {{ $filters.currency(order.total) }}
+        </strong>
       </div>
       <div class="d-flex justify-content-between align-items-center fs-5">
         <strong class="text-nowrap">付款狀態</strong>
