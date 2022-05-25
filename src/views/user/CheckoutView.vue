@@ -35,11 +35,11 @@
         <i class="bi bi-credit-card-2-back"></i>
         訂單資訊
       </h3>
-      <div class="row mb-4" v-for="item in order.products" :key="item.id">
+      <div class="row mb-4 g-0" v-for="item in order.products" :key="item.id">
         <div class="col-4">
           <img :src="item.product.imageUrl" alt="item.product.title">
         </div>
-        <div class="col-8 d-flex flex-column justify-content-between">
+        <div class="col-8 d-flex flex-column justify-content-between px-3 body">
           <div class="d-flex justify-content-between align-items-center">
             <h4 class="mb-0">{{ item.product.title }}</h4>
             <strong class="text-nowrap">X {{ item.qty }}</strong>
@@ -71,6 +71,12 @@
         height: 100px;
         object-fit: cover;
         object-position: center center;
+  }
+  .body {
+    background-color: rgba(104, 216, 247, 0.1);
+    &:hover {
+      background-color: rgba(104, 216, 247, 0.2);
+    }
   }
 </style>
 

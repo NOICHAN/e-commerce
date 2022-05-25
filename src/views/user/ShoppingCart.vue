@@ -5,11 +5,12 @@
     <i class="bi bi-box2-heart me-1"></i>
     購物車清單
   </h3>
-  <div class="row justify-content-center mb-4 gx-1 g-sm-4"
+  <div class="row justify-content-center mb-4 g-0"
   v-for="item in shoppingCarts.carts" :key="item.id">
     <div class="col-4 col-lg-2">
-      <img :src="item.product.imageUrl" :alt="item.product.title"></div>
-    <div class="col-6 d-flex flex-column justify-content-between body">
+      <img :src="item.product.imageUrl" :alt="item.product.title">
+    </div>
+    <div class="col-6 d-flex flex-column justify-content-between px-1 px-md-4 body">
       <div class="d-flex justify-content-between align-items-center m-0 p-0">
         <h4 class="mb-0">{{ item.product.title }}</h4>
         <button class="symbol fs-2 fw-bold delete"
@@ -149,9 +150,13 @@
 
 <div class="bg-white py-5 d-flex flex-column justify-content-center align-items-center" v-else>
   <p class="fs-5">你的購物車還是空的</p>
-    <router-link class="btn btn-outline-warning mb-4" to="/user/list">去逛逛主子喜歡甚麼
-    <i class="bi bi-hearts"></i></router-link>
-    <img class="cartCat" src="@/assets/images/CartCat.jpg" alt="cat">
+    <router-link class="btn btn-outline-warning mb-4" to="/user/list">
+      去逛逛主子喜歡甚麼
+      <i class="bi bi-hearts"></i>
+    </router-link>
+    <span>
+      <img class="cartCat" src="@/assets/images/CartCat.jpg" alt="cat">
+    </span>
 </div>
 
 <DelModal :item="tempSoppingCart" ref="delModal" @del-item="delCart"></DelModal>
@@ -176,7 +181,7 @@
         width: 100%;
         height: 32px;
         border: none;
-        background-color: #fff;
+        background-color: transparent;
       }
   .num {
     flex: initial;
@@ -188,6 +193,12 @@
   .couponCode {
     flex: initial;
     width: 100%;
+  }
+  .body {
+    background-color: rgba(104, 216, 247, 0.1);
+    &:hover {
+      background-color: rgba(104, 216, 247, 0.2);
+    }
   }
   .style {
     color: #181b46;
@@ -214,7 +225,7 @@
   }
   .symbol {
     border: none;
-    background-color: #fff;
+    background-color: transparent;
     color: #181b46;
     font-size: 16px;
     &:hover {
