@@ -26,14 +26,13 @@
         <td class="text-nowrap">$ {{ $filters.currency(item.total) }}</td>
         <td>
              <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox"
-              :id="`paidSwitch${item.id}`" v-model="item.is_paid"
-              @change="updateOrder(item)">
-              <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
               <label class="form-check-label" :for="`paidSwitch${item.id}`">
-                <span v-if="item.is_paid">已付款</span>
-                <span v-else>未付款</span>
+                <input class="form-check-input" type="checkbox"
+                  :id="`paidSwitch${item.id}`" v-model="item.is_paid"
+                  @change="updateOrder(item)">
               </label>
+              <span v-if="item.is_paid">已付款</span>
+              <span v-else>未付款</span>
             </div>
         </td>
         <td class="d-none d-sm-table-cell">

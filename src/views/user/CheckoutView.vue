@@ -1,28 +1,14 @@
 <template>
   <Loading :loading="isLoading"></Loading>
-  <div class="row justify-content-center bg-white py-5">
-    <div class="col-5">
-      <table class="table mb-5">
-        <thead>
-          <tr>
-            <th scope="col">品名</th>
-            <th scope="col">數量</th>
-            <th scope="col">單價</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in order.products" :key="item.id">
-            <td>{{ item.product.title }}</td>
-            <td>{{ item.qty }} / {{ item.product.unit }}</td>
-            <td class="text-end pe-4 text-nowrap">$ {{ $filters.currency(item.product.price) }}</td>
-          </tr>
-        </tbody>
-        <tfoot class="text-end fw-bold fs-5">
-          <td></td>
-          <td><p class="text-nowrap mb-0">總計 :</p></td>
-          <td><p class="pe-4 text-nowrap mb-0"> $ {{ $filters.currency(order.total) }}</p></td>
-        </tfoot>
-      </table>
+  <div class="row flex-column flex-lg-row justify-content-center align-items-center
+  align-items-lg-start bg-white py-5">
+    <div class="col-10 col-md-8 col-lg-5">
+      <h3 class="text-primary mb-3">
+        <i class="bi bi-card-checklist"></i>
+        確認資料
+      </h3>
+      <p>感謝您訂購毛孩一家一商品，我們已收收訂單，確認付款後會立即準備出貨。</p>
+      <p>以下是您的個人資料，請詳細核對，如有誤造成無法至指定日送達，我們將不負任何責任。</p>
       <table class="table mb-5">
           <tbody>
               <tr class="mb-3">
@@ -41,23 +27,52 @@
               <th>收件人地址</th>
               <td><span>{{ order.user.address }}</span></td>
           </tr>
-          <tr>
-              <th>付款狀態</th>
-              <td>
-                  <strong v-if="order.is_paid" class="text-success">付款完成</strong>
-                  <span v-else class="text-muted">尚未付款</span>
-              </td>
-          </tr>
           </tbody>
       </table>
-      <div class="text-end mb-5" v-show="!order.is_paid">
-        <button type="button" class="btn btn-outline-warning"
+    </div>
+    <div class="col-10 col-md-8 col-lg-5">
+      <h3 class="text-primary mb-3">
+        <i class="bi bi-credit-card-2-back"></i>
+        訂單資訊
+      </h3>
+      <div class="row mb-4" v-for="item in order.products" :key="item.id">
+        <div class="col-4">
+          <img :src="item.product.imageUrl" alt="item.product.title">
+        </div>
+        <div class="col-8 d-flex flex-column justify-content-between">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">{{ item.product.title }}</h4>
+            <strong class="text-nowrap">X {{ item.qty }}</strong>
+          </div>
+          <span class="align-self-end">$ {{ $filters.currency(item.product.price) }}</span>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between align-items-center fs-5 mb-2">
+        <strong class="text-nowrap">總計</strong>
+        <strong class="text-nowrap text-danger">$ {{ $filters.currency(order.total) }}</strong>
+      </div>
+      <div class="d-flex justify-content-between align-items-center fs-5">
+        <strong class="text-nowrap">付款狀態</strong>
+        <strong v-if="order.is_paid" class="text-success">付款完成</strong>
+        <strong v-else class="text-danger text-nowrap">尚未付款</strong>
+      </div>
+      <div class="text-end mt-5" v-show="!order.is_paid">
+        <button type="button" class="btn btn-outline-info"
         @click="payOrder">確認付款
         </button>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+  img {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        object-position: center center;
+  }
+</style>
 
 <script>
 import errorHandler from '@/utils/errorHandler.js';

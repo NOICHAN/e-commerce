@@ -1,6 +1,6 @@
 <template>
-<!-- eslint-disable-next-line max-len -->
-<div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal">
+<div class="modal fade" id="delModal" tabindex="-1"
+aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal">
   <div class="modal-dialog">
     <div class="modal-content border-0">
       <div class="modal-header bg-danger text-white">

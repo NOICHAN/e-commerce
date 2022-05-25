@@ -15,18 +15,17 @@
       <div class="row">
         <div class="col-sm-4">
           <div class="mb-3">
-            <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
-            <label for="image" class="form-label">輸入圖片網址</label>
-            <input type="text" class="form-control" id="image" v-model="tempProduct.imageUrl"
-                    placeholder="請輸入圖片連結">
+            <label for="image" class="form-label d-block">
+              輸入圖片網址
+              <input type="text" class="form-control" id="image"
+              v-model="tempProduct.imageUrl" placeholder="請輸入圖片連結">
+              </label>
           </div>
           <div class="mb-3">
-              <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
             <label for="customFile" class="form-label">或 上傳圖片
-              <i class="fas fa-spinner fa-spin"></i>
-            </label>
-            <input type="file" id="customFile" class="form-control" ref="fileInput"
+              <input type="file" id="customFile" class="form-control" ref="fileInput"
             @change="uploadFile">
+            </label>
           </div>
           <img class="img-fluid" :src="tempProduct.imageUrl" alt="">
           <!-- 多圖 -->
@@ -113,26 +112,25 @@
           <hr>
 
           <div class="mb-3">
-              <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
-            <label for="description" class="form-label">產品描述</label>
-            <textarea type="text" class="form-control" id="description"
+            <label for="description" class="form-label d-block">產品描述
+              <textarea type="text" class="form-control" id="description"
             v-model="tempProduct.description"
             placeholder="請輸入產品描述"></textarea>
+            </label>
           </div>
           <div class="mb-3">
-              <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
-            <label for="content" class="form-label">說明內容</label>
-            <textarea type="text" class="form-control" id="content"
+            <label for="content" class="form-label d-block">說明內容
+              <textarea type="text" class="form-control" id="content"
             v-model="tempProduct.content"
             placeholder="請輸入產品說明內容"></textarea>
+            </label>
           </div>
           <div class="mb-3">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox"
+              <label class="form-check-label" for="is_enabled">
+                 <input class="form-check-input" type="checkbox"
               :true-value="1" :false-value="0"
               id="is_enabled" v-model="tempProduct.is_enabled">
-                      <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
-              <label class="form-check-label" for="is_enabled">
                 是否啟用
               </label>
             </div>

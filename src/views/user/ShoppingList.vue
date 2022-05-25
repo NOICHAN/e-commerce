@@ -179,10 +179,7 @@ export default {
         currentFavorites.push(item.id);
       }
       localStorage.setItem('favorites', JSON.stringify(currentFavorites));
-      this.getLocalStorage(currentFavorites);
-    },
-    getLocalStorage(currentFavorites) {
-      this.myFavorites = currentFavorites || JSON.parse(localStorage.getItem('favorites'));
+      this.myFavorites = currentFavorites;
     },
     async getSearchFilterProducts() {
       const query = this.$route.query.search;
@@ -204,8 +201,7 @@ export default {
     } else {
       await this.getSearchFilterProducts();
     }
-    this.getLocalStorage();
+    this.myFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
   },
 };
-
 </script>

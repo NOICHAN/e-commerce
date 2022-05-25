@@ -1,62 +1,58 @@
 <template>
     <Loading :loading="isLoading"></Loading>
 <div class="bg-white py-5" v-if="shoppingCarts.total !== 0">
-  <table class="table">
-  <thead>
-    <tr>
-      <th></th>
-      <th class="title">品名</th>
-      <th>數量</th>
-      <th>單價</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="item in shoppingCarts.carts" :key="item.id">
-      <td class="text-center ps-4">
-          <button type="button" class="btn btn-outline-danger px-2 py-1"
+  <h3 class="m-2 m-md-5 text-primary">
+    <i class="bi bi-box2-heart me-1"></i>
+    購物車清單
+  </h3>
+  <div class="row justify-content-center mb-4 gx-1 g-sm-4"
+  v-for="item in shoppingCarts.carts" :key="item.id">
+    <div class="col-4 col-lg-2">
+      <img :src="item.product.imageUrl" :alt="item.product.title"></div>
+    <div class="col-6 d-flex flex-column justify-content-between body">
+      <div class="d-flex justify-content-between align-items-center m-0 p-0">
+        <h4 class="mb-0">{{ item.product.title }}</h4>
+        <button class="symbol fs-2 fw-bold delete"
           @click="openDelCartModal(item)">
-              <i class="bi bi-trash-fill"></i></button>
-      </td>
-      <td>{{ item.product.title }}</td>
-      <td>
-        <div class="input-group">
-            <input type="number" class="form-control text-center num"
-            aria-label="Amount (to the nearest dollar)"
-            v-model="item.qty" min="1" @change="updateCart(item)">
-            <span class="input-group-text d-none d-md-block">{{ item.product.unit }}</span>
-        </div>
-      </td>
-      <td class="text-end pe-4 text-nowrap">$ {{ $filters.currency(item.final_total) }}</td>
-    </tr>
-  </tbody>
-  <tfoot class="text-end fw-bold">
-     <tr>
-      <td></td>
-      <td></td>
-      <td><p class="fs-5 mb-0 text-nowrap">總計 :</p></td>
-      <td>
-        <p class="pe-3 mb-0 text-nowrap" v-if="shoppingCarts.total === shoppingCarts.final_total">
-          $ {{ $filters.currency(shoppingCarts.total) }}</p>
-        <p class="pe-3 fs-6 text-decoration-line-through mb-0 text-nowrap" v-else>
-        $ {{ $filters.currency(shoppingCarts.total) }}</p>
-      </td>
-    </tr>
-    <tr v-if="shoppingCarts.total !== shoppingCarts.final_total">
-      <td></td>
-      <td></td>
-      <td><p class="fs-5 text-success mb-0 text-nowrap">折扣價 :</p></td>
-      <td>
-        <p class="pe-3 fs-6 text-success mb-0">
-          $ {{ $filters.currency(shoppingCarts.final_total) }}</p>
-      </td>
-    </tr>
-  </tfoot>
-</table>
-    <div class="input-group mb-3 input-group-sm d-flex justify-content-end pe-4">
-      <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label -->
-      <input type="text" class="form-control couponCode" placeholder="請輸入優惠碼" v-model="code">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+      <div class="d-flex justify-content-between align-items-center">
+        <label for="amount" class="d-flex align-items-center">
+          <button class="symbol" @click="updateCart(item,-1)">
+            <i class="bi bi-dash"></i>
+          </button>
+          <input class="text-center amount" type="number" disabled
+          v-model="item.qty">
+          <button class="symbol" @click="updateCart(item,1)">
+            <i class="bi bi-plus"></i>
+          </button>
+      </label>
+      <strong class="text-nowrap text-primary">$ {{ $filters.currency(item.final_total) }}</strong>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end align-items-center mb-2 fs-3">
+    <strong class="me-2 me-md-5 text-nowrap">總計 :</strong>
+    <strong class="me-5 text-nowrap text-danger"
+    v-if="shoppingCarts.total === shoppingCarts.final_total">
+        $ {{ $filters.currency(shoppingCarts.total) }}</strong>
+    <strong class="fs-5 me-5 text-nowrap text-dark text-decoration-line-through"
+    v-else>
+        $ {{ $filters.currency(shoppingCarts.total) }}</strong>
+  </div>
+  <div class="d-flex justify-content-end align-items-center fs-3"
+  v-if="shoppingCarts.total !== shoppingCarts.final_total">
+    <strong class="me-2 me-md-5 text-nowrap">折扣價 :</strong>
+    <strong class="me-5 text-nowrap text-danger">
+        $ {{ $filters.currency(shoppingCarts.final_total) }}</strong>
+  </div>
+    <div class="input-group my-4 input-group-sm d-flex justify-content-end pe-4">
+      <label for="couponCode">
+        <input type="text" class="form-control couponCode" placeholder="請輸入優惠碼" v-model="code">
+      </label>
       <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button"
+        <button class="btn btn-outline-info" type="button"
         @click="applyCoupon">
           套用優惠碼
         </button>
@@ -142,7 +138,7 @@
            <label for="floatingTextarea">留言</label>
         <div class="mt-5">
           <div class="text-end">
-            <button type="submit" class="btn btn-outline-warning">送出訂單
+            <button type="submit" class="btn btn-outline-info">送出訂單
             </button>
           </div>
         </div>
@@ -162,49 +158,75 @@
 </template>
 
 <style scoped lang="scss">
- td {
-   vertical-align:middle;
- }
- img {
-        max-width: 100%;
-        height: auto;
+  td {
+  vertical-align:middle;
+  }
+  img {
+        width: 100%;
+        height: 120px;
         object-fit: cover;
         object-position: center center;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+  .amount {
+        -moz-appearance: textfield;
+        width: 100%;
+        height: 32px;
+        border: none;
+        background-color: #fff;
+      }
+  .num {
+    flex: initial;
+    width: 50px;
+    @media(min-width: 576px) {
+        width: 90px;
     }
- .num {
-   flex: initial;
-   width: 50px;
-   @media(min-width: 576px) {
-     width: 90px;
-   }
- }
- .couponCode {
-   flex: initial;
-   width: 120px;
- }
- .style {
+  }
+  .couponCode {
+    flex: initial;
+    width: 100%;
+  }
+  .style {
     color: #181b46;
     text-decoration:none;
     &:hover {
         color: #fd9735;
         }
       }
- .title {
-   width: 200px;
-   @media(min-width: 576px) {
-     width: 350px;
-   }
-   @media(min-width: 992px) {
-     width: 620px;
-   }
- }
-.cartCard {
-        height: 100px;
+  .title {
+    width: 200px;
+    @media(min-width: 576px) {
+      width: 350px;
     }
- .cartCat {
-   max-width: 100%;
-   height: auto;
- }
+    @media(min-width: 992px) {
+      width: 620px;
+    }
+  }
+  .cartCard {
+    height: 100px;
+    }
+  .cartCat {
+    max-width: 100%;
+    height: auto;
+  }
+  .symbol {
+    border: none;
+    background-color: #fff;
+    color: #181b46;
+    font-size: 16px;
+    &:hover {
+      color: #0dcaf0;
+    }
+    @media(min-width: 576px) {
+      font-size: 32px;
+    }
+  }
+  .delete:hover {
+    color: #dc3545;
+  }
 </style>
 
 <script>
@@ -269,20 +291,22 @@ export default {
         this.isLoading = false;
       }
     },
-    async updateCart(item) {
+    async updateCart(item, num) {
       try {
-        if (item.qty < 1) {
+        const sum = item.qty + num;
+        if (sum < 1) {
           await this.openDelCartModal(item);
         } else {
           const updateCartUrl = `${this.$apiUrl}/cart/${item.id}`;
           const cart = {
             product_id: item.product_id,
-            qty: item.qty,
+            qty: sum,
           };
           const res = await this.$http.put(updateCartUrl, { data: cart });
           if (!res.data.success) {
             throw new Error('updateOrderFailed');
           }
+          console.log(item);
         }
       } catch (error) {
         errorHandler(this.$alert, error.message);

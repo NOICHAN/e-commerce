@@ -139,17 +139,14 @@ export default {
           product_id: this.product.id,
           qty: this.quantity,
         };
-        this.isLoading = true;
         const res = await this.$http.post(addProductToShoppingCartUrl, { data: cart });
         if (res.data.success) {
-          this.$alert(`${this.product.title} 已加入購物車`);
+          this.$router.go(0);
         } else {
           throw new Error('updateOrderFailed');
         }
       } catch (error) {
         errorHandler(this.$alert, error.message);
-      } finally {
-        this.isLoading = false;
       }
     },
   },

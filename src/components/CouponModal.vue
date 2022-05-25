@@ -51,12 +51,12 @@
           </div>
           <div class="mb-3">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox"
-                     :true-value="1"
-                     :false-value="0" id="is_enabled"
-                     v-model="tempCoupon.is_enabled">
             <!-- eslint-disable-next-line vuejs-accessibility/label-has-for -->
               <label class="form-check-label" for="is_enabled">
+                <input class="form-check-input" type="checkbox"
+                    :true-value="1"
+                    :false-value="0" id="is_enabled"
+                    v-model="tempCoupon.is_enabled">
                 是否啟用
               </label>
             </div>
