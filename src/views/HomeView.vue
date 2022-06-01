@@ -9,7 +9,7 @@
           <li>想讓主子對你撒嬌求抱抱?</li>
         </ul>
         <p class="h4 text-white">奴才們~</p>
-        <router-link to="/user/list" class="h3 mb-0 btn btn-lg btn-outline-light">尋找主子的最愛
+        <router-link to="/user/list" class="h3 mb-0 btn btn-lg btn-outline-info enter">尋找主子的最愛
         </router-link>
       </div>
   </div>
@@ -23,14 +23,14 @@
   </div>
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="https://images.unsplash.com/photo-1493406300581-484b937cdc41?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170" class="d-block w-100" alt="你購物，我捐款。">
+      <img src="https://images.unsplash.com/photo-1493406300581-484b937cdc41?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170" class="d-block w-100 activityImg" alt="你購物，我捐款。">
       <div class="carousel-caption d-none d-md-block bg-special">
         <h5 class="text-danger h2 fw-bold">你購物，我捐款。</h5>
         <p class="fs-5">即日起至8月底，毛孩一家一所營利的百分之10，全數捐給XX動物協會。</p>
       </div>
     </div>
     <div class="carousel-item">
-      <img src="https://images.unsplash.com/photo-1529257414772-1960b7bea4eb?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170" class="d-block w-100" alt="全館滿499元免運">
+      <img src="https://images.unsplash.com/photo-1529257414772-1960b7bea4eb?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170" class="d-block w-100 activityImg" alt="全館滿499元免運">
       <div class="carousel-caption d-none d-md-block bg-special">
         <h5 class="text-danger h2 fw-bold">全館滿499元免運</h5>
         <p class="fs-5">一年一度週年慶，連出門都不用就可以哄主子開心，真好~</p>
@@ -51,7 +51,7 @@
   </div>
   <div class="container">
     <div class="py-5 text-center">
-      <h3 class="my-4 h2 text-primary"><i class="bi bi-binoculars me-1"></i>探索主子的最愛</h3>
+      <h3 class="mb-4 h2 text-primary"><i class="bi bi-binoculars-fill me-1"></i>探索主子的最愛</h3>
       <div class="row row-cols-1 row-cols-sm-3 g-2 g-md-5">
         <div class="col">
           <a href="#" class="category fs-1 feed "
@@ -72,7 +72,7 @@
     </div>
   </div>
   <div class="bg-primary py-5 text-white text-center">
-    <h3 class="my-4 h2"><i class="bi bi-flower3 me-1"></i>主要服務項目</h3>
+    <h3 class="mb-4 h2"><i class="bi bi-flower3 me-1"></i>主要服務項目</h3>
     <div class="container-fluid">
       <div class="row row-cols-1 row-cols-md-3">
       <div class="col">
@@ -104,23 +104,33 @@
   </div>
   <div class="container">
     <div class="py-5 text-center">
-      <h3 class="my-4 h2 text-primary"><i class="bi bi-hand-thumbs-up me-1"></i>店貓推薦</h3>
-      <div class="row">
-        <div class="col-4"></div>
-        <div class="col-8"><div class="row">
-          <div class="col"></div>
-          <div class="col"></div>
-          <div class="col"></div>
-        </div></div>
+      <h3 class="mb-4 h2 text-primary"><i class="bi bi-hand-thumbs-up-fill me-1"></i>貓店長推薦</h3>
+      <div class="row flex-column flex-md-row gy-5 gy-md-0 gx-md-5
+      justify-content-center align-items-center">
+        <div class="col col-md-3 bg-special text-white">
+          <h4 class="mt-2">不知道選什麼?<br/>
+            來看看貓店長的推薦吧!
+          </h4>
+          <p>參考看看其牠貓主子喜歡什麼吧!</p>
+        </div>
+        <div class="col col-md-9">
+          <div class="row gy-3 gy-md-0">
+            <div class="col-12 col-sm-4 recommend" v-for="item in recommend" :key="item.id">
+              <img class="recommendImg" :src="item.imageUrl" :alt="item.title">
+              <button type="button" class="more btn btn-info"
+              @click="getProduct(item.id)">查看更多</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   <div class="bg-primary py-5 text-white text-center">
-    <h3 class="my-4 h2"><i class="bi bi-info-circle me-1"></i>最新消息</h3>
+    <h3 class="mb-4 h2"><i class="bi bi-info-circle me-1"></i>最新消息</h3>
     <div class="container-fluid">
       <div class="row align-items-center row-cols-1 row-cols-md-2">
       <div class="col mb-5 mb-md-0">
-        <img src="https://images.unsplash.com/photo-1651720602215-7de4043a9611?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=60&raw_url=true&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTI3fHxjYXR8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500" alt="全館滿499元免運">
+        <img src="https://images.unsplash.com/photo-1651720602215-7de4043a9611?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=60&raw_url=true&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTI3fHxjYXR8ZW58MHwyfDB8fA%3D%3D&auto=format&fit=crop&w=500" class="discountImg" alt="全館滿499元免運">
       </div>
       <div class="col">
         <div class="text-md-start">
@@ -137,15 +147,15 @@
       <h3 class="my-4 h2 text-primary"><i class="bi bi-envelope-check me-1"></i>訂閱我們</h3>
       <div class="d-flex mb-4">
         <label for="email">
-          <input type="email" placeholder="請輸入Mail"
+          <input type="email" placeholder="請輸入E-mail"
         class="border-0 rounded">
         </label>
         <button class="btn btn-outline-danger">訂閱</button>
       </div>
     </div>
   </div>
-  <div class="bg-primary text-center text-white">
-    <h3 class="py-4 h2"><i class="bi bi-shop me-1"></i>門市</h3>
+  <div class="bg-primary text-center text-white py-5">
+    <h3 class="mb-4 h2"><i class="bi bi-shop me-1"></i>門市</h3>
     <div class="container-fluid">
       <div class="row align-items-center row-cols-1 row-cols-lg-2">
       <div class="col mb-5 mb-lg-0">
@@ -183,19 +193,49 @@ ul {
   color: #fff;
   padding: 0;
 }
-
-img {
+.enter {
+  color: #fff;
+  border: 1px solid #fff;
+  &:hover {
+    border: 1px solid #0dcaf0;
+  }
+}
+.activityImg,
+.discountImg {
         height: 200px;
-        position: relative;
         object-fit: cover;
         object-position: center center;
         @media(min-width: 768px) {
           height: 400px;
         }
     }
+.recommend {
+  height: 200px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  &:hover .more {
+    bottom: 0%;
+  }
+  .recommendImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+  .more {
+    position: absolute;
+    left: 50%;
+    bottom: -50%;
+    text-align: center;
+    transition: .5s;
+    transform: translateY(-50%) translateX(-50%);
+  }
+}
 
-  input[type="email"] {
+input[type="email"] {
   height: 38px;
+  padding: 10px;
 }
 
 .bg-special {
@@ -227,7 +267,7 @@ img {
   }
   .textBox {
     position: absolute;
-    left: 0;
+    left: 0%;
     top: -102%;
     width: 100%;
     height: 102%;
@@ -268,8 +308,43 @@ iframe {
 </style>
 
 <script>
+import errorHandler from '@/utils/errorHandler.js';
+
 export default {
+  data() {
+    return {
+      products: [],
+      recommend: [],
+    };
+  },
   methods: {
+    async getShoppingProducts() {
+      try {
+        const getAllShoppingProducts = `${this.$apiUrl}/products/all`;
+        this.isLoading = true;
+        const res = await this.$http.get(getAllShoppingProducts);
+        if (res.data.success) {
+          this.products = res.data.products;
+        } else {
+          throw new Error('updateOrderFailed');
+        }
+      } catch (error) {
+        errorHandler(this.$alert, error.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    getRecommend() {
+      for (let i = 0; this.recommend.length < 3; i += 1) {
+        const randomIndex = Math.floor(Math.random() * (this.products.length));
+        const product = this.products[randomIndex];
+        if (!this.recommend.includes(product)) {
+          this.recommend.push(product);
+          this.products.splice(randomIndex, 1);
+        }
+      }
+      console.log(this.recommend);
+    },
     showCoupon() {
       this.$alert('八折優惠碼 : good-8 ');
     },
@@ -279,6 +354,13 @@ export default {
         query: { category: item },
       });
     },
+    getProduct(id) {
+      this.$router.push(`/user/product/${id}`);
+    },
+  },
+  async mounted() {
+    await this.getShoppingProducts();
+    this.getRecommend();
   },
 };
 </script>
