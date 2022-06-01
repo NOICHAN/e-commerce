@@ -1,18 +1,6 @@
 <template>
-
+<Navbar></Navbar>
 <div class="wrap">
-  <div class="container d-flex justify-content-center py-5">
-      <div class="bg-special p-3 text-center">
-        <ul class="h5">
-          <li>想讓主子用渴望的眼神看著你?</li>
-          <li>想讓主子在門口等你回家嗎?</li>
-          <li>想讓主子對你撒嬌求抱抱?</li>
-        </ul>
-        <p class="h4 text-white">奴才們~</p>
-        <router-link to="/user/list" class="h3 mb-0 btn btn-lg btn-outline-info enter">尋找主子的最愛
-        </router-link>
-      </div>
-  </div>
   <div>
     <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
   <div class="carousel-indicators">
@@ -50,6 +38,17 @@
 </div>
   </div>
   <div class="container">
+    <div class="py-5 text-center">
+      <h3 class="mb-4 h2 text-primary"><i class="bi bi-hand-thumbs-up-fill me-1"></i>貓店長推薦</h3>
+      <div class="row flex-column flex-md-row gy-5 gy-md-0 gx-md-5
+      justify-content-center align-items-center">
+        <div class="col-12 col-sm-4 recommend" v-for="item in recommend" :key="item.id">
+          <img class="recommendImg" :src="item.imageUrl" :alt="item.title">
+          <button type="button" class="more btn btn-info"
+              @click="getProduct(item.id)">查看更多</button>
+        </div>
+      </div>
+    </div>
     <div class="py-5 text-center">
       <h3 class="mb-4 h2 text-primary"><i class="bi bi-binoculars-fill me-1"></i>探索主子的最愛</h3>
       <div class="row row-cols-1 row-cols-sm-3 g-2 g-md-5">
@@ -103,27 +102,6 @@
     </div>
   </div>
   <div class="container">
-    <div class="py-5 text-center">
-      <h3 class="mb-4 h2 text-primary"><i class="bi bi-hand-thumbs-up-fill me-1"></i>貓店長推薦</h3>
-      <div class="row flex-column flex-md-row gy-5 gy-md-0 gx-md-5
-      justify-content-center align-items-center">
-        <div class="col col-md-3 bg-special text-white">
-          <h4 class="mt-2">不知道選什麼?<br/>
-            來看看貓店長的推薦吧!
-          </h4>
-          <p>參考看看其牠貓主子喜歡什麼吧!</p>
-        </div>
-        <div class="col col-md-9">
-          <div class="row gy-3 gy-md-0">
-            <div class="col-12 col-sm-4 recommend" v-for="item in recommend" :key="item.id">
-              <img class="recommendImg" :src="item.imageUrl" :alt="item.title">
-              <button type="button" class="more btn btn-info"
-              @click="getProduct(item.id)">查看更多</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
   <div class="bg-primary py-5 text-white text-center">
     <h3 class="mb-4 h2"><i class="bi bi-info-circle me-1"></i>最新消息</h3>
@@ -181,10 +159,14 @@
 
 <style scoped lang="scss">
 .wrap {
-  background-image: url(https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?crop=entropy&cs=tinysrgb&fm=jpg&ixlib=rb-1.2.1&q=80&raw_url=true&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870);
+  background-image: url('@/assets/images/bg.png');
   background-size: cover;
   background-position: center center;
   background-attachment: fixed;
+  margin-top: 90px;
+  @media(min-width: 576px){
+      margin-top: 108px;
+    }
 }
 
 ul {
@@ -220,6 +202,7 @@ ul {
   .recommendImg {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
     object-fit: cover;
     object-position: center center;
   }
@@ -309,6 +292,7 @@ iframe {
 
 <script>
 import errorHandler from '@/utils/errorHandler.js';
+import Navbar from '@/components/NavbarHome.vue';
 
 export default {
   data() {
@@ -316,6 +300,9 @@ export default {
       products: [],
       recommend: [],
     };
+  },
+  components: {
+    Navbar,
   },
   methods: {
     async getShoppingProducts() {
