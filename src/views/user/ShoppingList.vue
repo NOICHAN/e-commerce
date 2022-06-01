@@ -198,6 +198,10 @@ export default {
   async mounted() {
     if (this.$route.query.search === undefined) {
       await this.getShoppingProducts();
+      const { category } = this.$route.query;
+      if (category !== undefined) {
+        this.selectType(category);
+      }
     } else {
       await this.getSearchFilterProducts();
     }
