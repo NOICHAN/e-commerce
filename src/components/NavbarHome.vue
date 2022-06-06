@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4
   fixed-top flex-wrap justify-content-center">
-    <div class="container-fluid h4 fw-bold">
+    <div class="container-fluid h4 fw-bold mb-0">
       <h1 class="mb-0">
         <router-link class="navbar-brand border-0 logo" to="/">毛孩一家一</router-link>
       </h1>
@@ -32,10 +32,10 @@
         </ul>
       </div>
     </div>
-    <div class="d-flex w-75 rounded-pill bg-secondary height">
-        <input class="form-control bg-secondary border-0 w-100 rounded-pill"
+    <div class="d-flex w-50 rounded-pill bg-white height">
+        <input class="form-control border-0 w-100 rounded-pill"
         type="search" placeholder="請輸入關鍵字" aria-label="Search" v-model="keywords">
-        <button class="border-0 px-3 rounded-pill" type="button" @click="searchKeywords">
+        <button class="border-0 px-3 rounded-pill bg-white" type="button" @click="searchKeywords">
           <i class="bi bi-search"></i>
         </button>
     </div>
@@ -43,21 +43,24 @@
 </template>
 
 <style scoped lang="scss">
-a {
-    color: #aaa;
+.navbar {
+  box-shadow: 0px 3px 6px #00000029;
+}
+.navbar-nav .nav-link {
+    color: #fff;
 
     &:hover {
-        border-bottom: 3px solid #fff;
+        border-bottom: 3px solid #181b46;
         }
 
     &.active {
-        color: #fff;
-        border-bottom: 3px solid #fff;
+        color: #181b46;
+        border-bottom: 3px solid #181b46;
         }
 }
 input[type="search"]:focus {
-  border-color: #ececec;
-  box-shadow: 0 1px 1px #ececec inset;
+  border-color: #fff;
+  box-shadow: 0 1px 1px #fff inset;
 }
 .height {
   height: 25px;

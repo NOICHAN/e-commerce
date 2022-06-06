@@ -1,6 +1,14 @@
 <template>
   <div class="row py-5 bg-white flex-column justify-content-center">
-    <div class="col mb-4 d-sm-flex justify-content-center">
+    <div class="banner">
+      <img src="https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="d-block w-100 bannerImg" alt="全館滿499元免運">
+      <div class="bannerContent bg-special text-white">
+        <h3 class="text-danger">什麼 !?</h3>
+        <p>輸入折扣碼 : <strong class="text-nowrap">我是貓奴</strong></p>
+        <p class="text-nowrap">全館再打八折</p>
+      </div>
+    </div>
+    <div class="col mb-4 d-sm-flex justify-content-center pt-5">
       <div class="list-group fs-5 mx-2" v-for="item in type" :key="item">
         <button class="list-group-item list-group-item-action"
         type="button" :class="{active: active === item.engType}"
@@ -19,7 +27,7 @@
       v-if="filterProducts.length !== 0">
         <div class="col" v-for="item in filterProducts" :key="item.id">
           <div class="card h-100">
-              <img :src="item.imageUrl" class="card-img-top" :alt="item.title">
+            <img :src="item.imageUrl" class="card-img-top" :alt="item.title">
             <button type="button" class="toggle border-0" @click="toggleFavorites(item)">
               <i class="fs-5 bi bi-heart-fill" :class="{active: myFavorites.includes(item.id)}"></i>
             </button>
@@ -55,31 +63,69 @@
           height: 200px;
         }
     }
+    .bannerImg {
+        height: 250px;
+        object-fit: cover;
+        object-position: center center;
+        @media(min-width: 768px) {
+          height: 500px;
+        }
+    }
+    .bg-special {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+    .banner {
+      position: relative;
+      .bannerContent {
+        position: absolute;
+        top: 50%;
+        left: 75%;
+        padding: 10px;
+        transform: translateY(-50%) translateX(-50%);
+        @media(min-width: 576px) {
+          left: 75%;
+          padding: 20px;
+          h3 {
+            font-size: 36px;
+          }
+          p {
+            font-size: 24px;
+          }
+        }
+      }
+    }
     .toggle {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      background-color: transparent;
+      z-index: 10;
+      top: 0;
+      right: 0;
+      padding: 10px;
+      background-color: #bad5f6;
+      border-bottom-right-radius: 24px;
+      border-bottom-left-radius: 24px
     }
     .bi {
-      color: #ececec;
+      color: #fff;
       &:hover {
-        color: #e56cdf;
+        color: #ee5ce6;
         }
       &.active {
-        color: #e56cdf;
+        color: #ee5ce6;
       }
     }
+    .card {
+      position: relative;
     .style {
-    color: #181b46;
-    text-decoration:none;
-    &:hover {
+      color: #181b46;
+      text-decoration:none;
+      &:hover {
         color: #0dcaf0;
-        }
       }
-    .card-body {
-        position: relative;
     }
+    &:hover {
+      box-shadow: 5px 5px 6px #00000029;
+    }
+  }
     .fixed {
       bottom: 20%;
       right: 3%;

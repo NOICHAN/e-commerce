@@ -1,7 +1,7 @@
 <template>
     <Loading :loading="isLoading"></Loading>
 <div class="bg-white py-5" v-if="shoppingCarts.total !== 0">
-  <h3 class="m-2 m-md-5 text-primary">
+  <h3 class="m-2 m-md-5 text-warning">
     <i class="bi bi-box2-heart me-1"></i>
     購物車清單
   </h3>
@@ -29,7 +29,7 @@
             <i class="bi bi-plus"></i>
           </button>
       </label>
-      <strong class="text-nowrap text-primary">$ {{ $filters.currency(item.final_total) }}</strong>
+      <strong class="text-nowrap text-warning">$ {{ $filters.currency(item.final_total) }}</strong>
       </div>
     </div>
   </div>
@@ -200,13 +200,18 @@
       background-color: rgba(104, 216, 247, 0.2);
     }
   }
-  .style {
-    color: #181b46;
-    text-decoration:none;
-    &:hover {
-        color: #fd9735;
-        }
+  .card {
+    .style {
+      color: #181b46;
+      text-decoration:none;
+      &:hover {
+        color: #0dcaf0;
       }
+    }
+    &:hover {
+      box-shadow: 5px 5px 6px #00000029;
+    }
+  }
   .title {
     width: 200px;
     @media(min-width: 576px) {

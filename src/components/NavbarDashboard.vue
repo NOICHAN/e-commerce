@@ -30,16 +30,19 @@
 </template>
 
 <style scoped lang="scss">
-a {
-    color: #aaa;
+.navbar {
+  box-shadow: 0px 3px 6px #00000029;
+}
+.navbar-nav .nav-link {
+    color: #fff;
 
     &:hover {
-        border-bottom: 3px solid #fff;
+        border-bottom: 3px solid #181b46;
         }
 
     &.active {
-        color: #fff;
-        border-bottom: 3px solid #fff;
+        color: #181b46;
+        border-bottom: 3px solid #181b46;
         }
 }
 .logo {

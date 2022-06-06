@@ -3,7 +3,7 @@
   <div class="row flex-column flex-lg-row justify-content-center align-items-center
   align-items-lg-start bg-white py-5">
     <div class="col-10 col-md-8 col-lg-5">
-      <h3 class="text-primary mb-3">
+      <h3 class="text-warning mb-3">
         <i class="bi bi-card-checklist"></i>
         確認資料
       </h3>
@@ -31,7 +31,7 @@
       </table>
     </div>
     <div class="col-10 col-md-8 col-lg-5">
-      <h3 class="text-primary mb-3">
+      <h3 class="text-warning mb-3">
         <i class="bi bi-credit-card-2-back"></i>
         訂單資訊
       </h3>

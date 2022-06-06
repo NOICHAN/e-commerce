@@ -58,7 +58,7 @@
             text-decoration: none;
             color: #fff;
             &:hover {
-                color: #0dcaf0;
+                color: #181b46;
             }
         }
 </style>
