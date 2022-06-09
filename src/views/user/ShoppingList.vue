@@ -29,7 +29,8 @@
           <div class="card h-100">
             <img :src="item.imageUrl" class="card-img-top" :alt="item.title">
             <button type="button" class="toggle border-0" @click="toggleFavorites(item)">
-              <i class="fs-5 bi bi-heart-fill" :class="{active: myFavorites.includes(item.id)}"></i>
+              <i class="bi bi-heart-fill" :class="{active: myFavorites.includes(item.id)}">
+              </i>
             </button>
             <div class="card-body d-flex flex-column justify-content-between">
               <h3 class="card-title">
@@ -103,30 +104,31 @@
       padding: 10px;
       background-color: #bad5f6;
       border-bottom-right-radius: 24px;
-      border-bottom-left-radius: 24px
-    }
-    .bi {
-      color: #fff;
-      &:hover {
-        color: #ee5ce6;
+      border-bottom-left-radius: 24px;
+      i {
+        color: #fff;
+        font-size: 20px;
+        &:hover {
+          font-size: 24px;
+          }
+        &.active {
+          color: #ee5ce6;
         }
-      &.active {
-        color: #ee5ce6;
       }
     }
     .card {
       position: relative;
-    .style {
-      color: #181b46;
-      text-decoration:none;
+      .style {
+        color: #181b46;
+        text-decoration:none;
+        &:hover {
+          color: #0dcaf0;
+        }
+      }
       &:hover {
-        color: #0dcaf0;
+        box-shadow: 5px 5px 6px #00000029;
       }
     }
-    &:hover {
-      box-shadow: 5px 5px 6px #00000029;
-    }
-  }
     .fixed {
       bottom: 20%;
       right: 3%;
@@ -215,6 +217,7 @@ export default {
       }
     },
     toggleFavorites(item) {
+      console.log(1);
       const currentFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
       if (currentFavorites.includes(item.id)) {

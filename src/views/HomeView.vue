@@ -378,7 +378,6 @@ export default {
           this.products.splice(randomIndex, 1);
         }
       }
-      console.log(this.recommend);
     },
     showCoupon() {
       this.$alert('八折優惠碼 : good-8 ');
