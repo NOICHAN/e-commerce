@@ -1,7 +1,7 @@
 <template>
   <div class="row py-5 bg-white flex-column justify-content-center">
     <div class="banner">
-      <img src="https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="d-block w-100 bannerImg" alt="全館滿499元免運">
+      <img src="@/assets/images/productsCat.png" class="d-block w-100 bannerImg" alt="全館滿499元免運">
       <div class="bannerContent bg-special text-white">
         <h3 class="text-danger">什麼 !?</h3>
         <p>輸入折扣碼 : <strong class="text-nowrap">我是貓奴</strong></p>
@@ -66,13 +66,14 @@
     .bannerImg {
         height: 250px;
         object-fit: cover;
-        object-position: center center;
+        object-position: top center;
         @media(min-width: 768px) {
-          height: 500px;
+          height: 400px;
         }
     }
     .bg-special {
       background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 24px;
     }
     .banner {
       position: relative;
@@ -96,7 +97,7 @@
     }
     .toggle {
       position: absolute;
-      z-index: 10;
+      z-index: 2;
       top: 0;
       right: 0;
       padding: 10px;
@@ -129,6 +130,7 @@
     .fixed {
       bottom: 20%;
       right: 3%;
+      z-index: 5;
     }
 </style>
 

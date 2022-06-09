@@ -14,16 +14,7 @@
   </div>
   <div class="bg-primary text-warning text-center">
     <div class="container py-5 text-center">
-      <h3 class="mb-4 h2 text-warning"><i class="bi bi-hand-thumbs-up-fill me-1"></i>貓店長推薦</h3>
-      <div class="row flex-column flex-sm-row gy-5 gy-md-0 gx-md-5
-      justify-content-center align-items-center">
-        <div class="col-8 col-sm-4 recommend" v-for="item in recommend" :key="item.id">
-          <img class="recommendImg" :src="item.imageUrl" :alt="item.title">
-          <button type="button" class="more btn btn-primary"
-              @click="getProduct(item.id)">查看更多</button>
-        </div>
-      </div>
-      <h3 class="mb-4 mt-5 h2 text-warning"><i class="bi bi-binoculars-fill me-1"></i>探索主子的最愛</h3>
+      <h3 class="mb-4 h2 text-warning"><i class="bi bi-binoculars me-1"></i>探索主子的最愛</h3>
       <div class="row flex-column flex-sm-row gy-5 gy-md-0 gx-md-5
       justify-content-center align-items-center">
         <div class="col-8 col-sm-4">
@@ -40,6 +31,62 @@
           <a href="#" class="category fs-1 toy"
           @click.prevent="category('toy')"><p>玩具</p>
           <div class="bg-special textBox"><p>立即前往</p></div></a>
+        </div>
+      </div>
+      <div class="row flex-column flex-sm-row justify-content-center align-items-center mt-5">
+        <div class="col-10 col-sm-7">
+          <div class="knowledge">
+            <img class="knowledgeImg" src="https://images.unsplash.com/photo-1555008872-f03b347ffb53?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="">
+            <div class="d-block d-sm-none knowledgeContent">
+            <h5 class="h3 text-white fw-bold mb-5">貓咪一天要喝多少水，你知道嗎？</h5>
+            <p class="text-white fw-bold">
+              貓咪一天需要攝取的水量大約是每公斤40~60ml，<br/>
+              如果長期食用乾飼料，且水量攝取不足，小心泌尿道疾病找上門。<br/>
+              奴才可藉由每天觀察喝水量及排尿量、定期去醫院做健康檢查，確保貓咪的健康。
+            </p>
+          </div>
+          </div>
+        </div>
+        <div class="col-sm-5 d-none d-sm-block">
+          <h5 class="h3 text-warning fw-bold">貓咪一天要喝多少水，你知道嗎？</h5>
+          <p class="text-warning fw-bold">
+            貓咪一天需要攝取的水量大約是每公斤40~60ml，<br/>
+            如果長期食用乾飼料，且水量攝取不足，小心泌尿道疾病找上門。<br/>
+            奴才可藉由每天觀察喝水量及排尿量、定期去醫院做健康檢查，確保貓咪的健康。</p>
+        </div>
+      </div>
+      <div class="row flex-column flex-sm-row-reverse
+      justify-content-center align-items-center mt-5">
+        <div class="col-10 col-sm-7">
+          <div class="knowledge">
+            <img class="knowledgeImg" src="https://images.unsplash.com/photo-1511275539165-cc46b1ee89bf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="">
+            <div class="d-block d-sm-none knowledgeContent">
+            <h5 class="h3 text-white fw-bold mb-5">原來貓咪也會過敏，你知道嗎？</h5>
+            <p class="text-white fw-bold">
+              貓咪也會對食物過敏，<br/>
+              除了常見的蛋白質過敏外，其它可能導致貓過敏的常見過敏原包含人工色素、澱粉、乳製品、穀物、膠類等...<br/>
+              奴才在挑選食物時要特別注意成份，避免挑選到容易導致貓咪過敏的成份飼料。
+            </p>
+          </div>
+          </div>
+        </div>
+        <div class="col-sm-5 d-none d-sm-block">
+          <h5 class="h3 text-warning fw-bold">原來貓咪也會過敏，你知道嗎？</h5>
+          <p class="text-warning fw-bold">
+              貓咪也會對食物過敏，<br/>
+              除了常見的蛋白質過敏外，其它可能導致貓過敏的常見過敏原包含人工色素、澱粉、乳製品、穀物、膠類、防腐劑等...<br/>
+              奴才在挑選食物時要特別注意成份，避免挑選到容易導致貓咪過敏的成份飼料。</p>
+        </div>
+      </div>
+      <h3 class="mb-4 mt-5 h2 text-warning"><i class="bi bi-hand-thumbs-up me-1"></i>貓店長推薦</h3>
+      <div class="row flex-column flex-sm-row gy-5 gy-md-0 gx-md-5
+      justify-content-center align-items-center">
+        <div class="col-8 col-sm-4" v-for="item in recommend" :key="item.id">
+          <div class="recommend">
+            <img class="recommendImg" :src="item.imageUrl" :alt="item.title">
+            <button type="button" class="more btn btn-primary"
+              @click="getProduct(item.id)">查看更多</button>
+          </div>
         </div>
       </div>
     <h3 class="mb-4 h2 mt-5"><i class="bi bi-flower3 me-1"></i>主要服務項目</h3>
@@ -157,11 +204,13 @@ ul {
     }
 .recommend {
   height: 200px;
-  display: block;
   position: relative;
   overflow: hidden;
+  border-radius: 24px;
+  box-shadow: 5px 5px 6px #00000029;
   &:hover .recommendImg {
-    border: 5px solid #0dcaf0;
+    transform: scale(1.1);
+    transition: transform .7s;
   }
   &:hover .more {
     bottom: 10%;
@@ -169,7 +218,6 @@ ul {
   .recommendImg {
     width: 100%;
     height: 100%;
-    border-radius: 24px;
     object-fit: cover;
     object-position: center center;
   }
@@ -183,6 +231,36 @@ ul {
   }
 }
 
+.knowledge {
+  height: 400px;
+  overflow: hidden;
+  border-radius: 24px;
+  position: relative;
+  box-shadow: 5px 5px 6px #00000029;
+  &:hover .knowledgeImg {
+    transform: scale(1.1);
+    transition: transform .7s;
+  }
+  &:hover .knowledgeContent {
+    bottom: 0;
+    transition: .5s;
+  }
+  .knowledgeImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+  .knowledgeContent {
+    width: 100%;
+    padding: 10px 5px 0 5px;
+    position: absolute;
+    bottom: -46%;
+    left: 0;
+    background: rgba(0, 0, 0, 0.2);
+  }
+}
+
 input[type="email"] {
   height: 38px;
   padding: 10px;
@@ -190,6 +268,8 @@ input[type="email"] {
 
 .bg-special {
   background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 24px;
+  box-shadow: 5px 5px 6px #00000029;
 }
 .category {
   display: block;
@@ -200,6 +280,7 @@ input[type="email"] {
   color: #181b46;
   position: relative;
   overflow: hidden;
+  box-shadow: 5px 5px 6px #00000029;
   &:hover .textBox{
       top: -1%;
     }
