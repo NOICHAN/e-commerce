@@ -4,12 +4,6 @@
       </VLoading>
 </template>
 
-<style lang="scss" scoped>
-    img {
-        width: 100vw;
-    }
-</style>
-
 <script>
 export default {
   props: {
