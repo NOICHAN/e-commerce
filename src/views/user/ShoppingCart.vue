@@ -312,6 +312,8 @@ export default {
         const sum = item.qty + num;
         if (sum < 1) {
           await this.openDelCartModal(item);
+        } else if (sum > 10) {
+          this.$alert('同一商品最大購買數為10');
         } else {
           const updateCartUrl = `${this.$apiUrl}/cart/${item.id}`;
           const cart = {
@@ -322,7 +324,6 @@ export default {
           if (!res.data.success) {
             throw new Error('updateOrderFailed');
           }
-          console.log(item);
         }
       } catch (error) {
         errorHandler(this.$alert, error.message);

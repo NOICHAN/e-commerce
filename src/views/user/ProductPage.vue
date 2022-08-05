@@ -37,7 +37,7 @@
         <label for="amount" class="d-flex align-items-center my-3">數量:
           <button class="ms-5 symbol" :disabled="quantity === 1" @click="count(-1)">-</button>
           <input id="amount" class="text-center" type="number" v-model="quantity">
-          <button class="symbol" @click="count(1)">+</button>
+          <button class="symbol" :disabled="quantity === 10" @click="count(1)">+</button>
         </label>
         <button type="button" class="btn btn-outline-info" @click="addProductToShoppingCart">
           <i class="bi bi-cart-plus me-2 fs-5"></i>加入購物車</button>
@@ -109,6 +109,8 @@ export default {
     quantity() {
       if (this.quantity < 1) {
         this.quantity = 1;
+      } else if (this.quantity > 10) {
+        this.quantity = 10;
       }
     },
   },
@@ -141,7 +143,10 @@ export default {
         };
         const res = await this.$http.post(addProductToShoppingCartUrl, { data: cart });
         if (res.data.success) {
-          this.$router.go(0);
+          this.$alert('此產品已加入購物車');
+          setTimeout(() => {
+            this.$router.go(0);
+          }, 1000);
         } else {
           throw new Error('updateOrderFailed');
         }

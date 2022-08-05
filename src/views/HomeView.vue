@@ -316,9 +316,9 @@ input[type="email"] {
   }
 }
 .feed {
-  background: url('https://img.my-best.tw/press_component/images/1abb3d2d00d7331dedcb54a77dd22774.jfif?ixlib=rails-4.2.0&q=70&lossless=0&w=690&fit=max');
+  background: url('https://img.mweb.com.tw/thumb/896/1000x1000/istock-807894744.jpg');
   background-size: cover;
-  background-position: center center;
+  background-position: center right;
 }
 .canned {
   background: url('https://secretary.nuu.edu.tw/var/file/3/1003/pictures/259/m/mczh-tw800x800_large10404_419276364205.png');
